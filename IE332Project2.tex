@@ -31,11 +31,7 @@ showstringspaces=false
 %  HEADER AND FOOTER (DO NOT EDIT) ----------------------
 \newcommand{\problemnumber}{0}
 \pagestyle{fancy}
-\newcommand{\newquestion}[1]{
-\clearpage % page break and flush floats
-\renewcommand{\problemnumber}{#1} % set problem number for header
-\phantom{}  % Put something on the page so it shows
-}
+\fancyhead{}
 \fancyfoot[L]{IE 332}
 \fancyfoot[C]{Project submission}
 \fancyfoot[R]{Page \thepage}
@@ -139,22 +135,31 @@ Accountable together -- we are Purdue.''}
 \addcoversheet
 \addtodo
 
+\pagebreak
+\tableofcontents
+\pagebreak
+
+
 % BEGIN YOUR ASSIGNMENT HERE:
+\def\Plus{\texttt{+}}
+\section{Main Text}
+\subsection{Introduction}
+\underline{Github Link:}\\
 
-% Question 1
-\newpage
 
-\noindent Example of proper typesetting of quotation marks:\\
-``proper opening and closing quotation marks'' vs "bad quotation marks".
+All experimental variants of your
+algorithm (e.g. with different sub-algorithms, and so forth) should be tracked with separate branches and the best
+one should then be merged into main.
 
-% Question 2
-\newpage
-
-Example of how to typeset and submit code in Latex:
-\begin{lstlisting}[language=R, frame=single]
-#EXAMPLE R CODE
-x <- c(1,2,3)
-\end{lstlisting}
+%APPENDICES
+\section{Appendices}
+\subsection{Testing/Correctness/Verification}
+\subsection{Runtime,
+Complexity and Walltime}
+\subsection{Performance}
+Justifying efficiency trade-offs in light of performance is crucial,
+so make sure you document all iterations of your algorithm and why you took that specific development path. 
+\section{References}
 
 
 \end{document}
