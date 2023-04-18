@@ -1,12 +1,17 @@
+#IMPORT LIBRARIES ========================================================
 library(tidyverse)
 library(keras)
 library(tensorflow)
 library(reticulate)
+#INSTALL PACKAGES ========================================================
 install_tensorflow(extra_packages="pillow")
 install_keras()
 setwd("IE332P2")
 model<-load_model_tf("./dandelion_model")
 
+#ALGORITHM ================================================================
+
+#CLASSIFIER ===============================================================
 res=c("","")
 f=list.files("./grass")
 target_size = c(224, 224)
