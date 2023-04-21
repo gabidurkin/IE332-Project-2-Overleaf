@@ -142,25 +142,57 @@ Accountable together -- we are Purdue.''}
 
 % BEGIN YOUR ASSIGNMENT HERE:
 \def\Plus{\texttt{+}}
-\section{Main Text}
-\subsection{Introduction}
+\section{Introduction}
 \underline{Github Link:}\\
 
 
-All experimental variants of your
+\noindent All experimental variants of your
 algorithm (e.g. with different sub-algorithms, and so forth) should be tracked with separate branches and the best
-one should then be merged into main.\\\\
-\indent In our algorithm, we selected 5 algorithms that will perform adversarial attacks collectively to trick the binary image classifier. After intensive research, we selected the Genetic Algorithm (GA), Particle Swarm Optimization (PSO), Simulated Annealing (SA), Gradient Descent and Random Forest as our algorithms to attack the classifier. The Genetic Algorithm is a heuristic that is based on natural selection where the fittest individuals are selected to pass on characteristics to the next generation. We selected this algorithm because XYZ. Particle Swarm Optimization XXX. We selected this algorithm because XYZ. Simulated Annealing is XXX. We selected this algorithm because XYZ. Gradient Attack is XXX. We selected this algorithm because XYZ. Lastly, Random Forest is XXX. After being familiarized with it in Assignment 2, we decided to implemement it as our fifth algorithm. 
+one should then be merged into main.
 
-Sub-algorithms we also looked includes the DeepFool algorithm, Fast Gradient Sign Method (FGSM) algorithm, Broyden-Flectcher-Goldfard-Shanno (L-BFGS) algorithm and Carlini and Wasgner (CW) attack algorithm. While all effective  at adversarial attacks with extensive research to back them, they did not end up in our final algorithm. The main reason for that is the failure to implement. Either the conversion to R was too complicated or the classifier could still recognize the image. Specifically, XYZ.  
+\subsection{Algorithm Introduction}
 
+\noindent In our algorithm, we selected five algorithms that will perform adversarial attacks collectively to trick the binary image classifier. After intensive research, we selected the Genetic Algorithm (GA), Particle Swarm Optimization (PSO), Simulated Annealing (SA), Hill Climbing, and Fast Gradient Sign Method (FGSM) as our algorithms to attack the classifier. 
+\newline\\
+\noindent The Genetic Algorithm is a heuristic that is based on natural selection where the fittest individuals are selected to pass on characteristics to the next generation. We selected this algorithm because of its ability to generate a variety of attacks through random mutation and its adaptability to changes in the original machine learning model. 
+\newline\\
+\noindent Particle Swarm Optimization implements the idea of when animals travel in a group they can profit from the experience of all other members. In terms of optimization, we start with a bunch of random points (particles) and let them look for an extrema in all directions. As the particles find extrema, they iterate and look for the next possible extrema. We selected this algorithm because it finds a solution quickly and works on a diverse set of problem types. 
+\newline\\
+\noindent Simulated Annealing is a stochastic global search algorithm. We selected this algorithm because of how good it is at finding a global optimum even in complex problems. Because particle swarm optimization may find more local optima, the team decided to alleviate this weak point by implementing simulated annealing. 
+\newline\\
+\noindent Hill climbing is an adversarial attack that capitalizes on the weakest points in the input data by iterating the mistake over and over again until the classifier cannot classify it anymore. The team selected this algorithm because of how easily and quickly this method can be implemented to cause damage. 
+\newline\\
+\noindent The final algorithm the team utilized is Fast Gradient Sign Method, which is an adversarial attack that stretches a weak point in the input data to confuse a classifier. This algorithm was implemented because of its simplicity in only needing to be run once forward and backward through the model.
+\newline\\
+\noindent Sub-algorithms we also looked includes the DeepFool algorithm, Fast Gradient Sign Method (FGSM) algorithm, Broyden-Flectcher-Goldfard-Shanno (L-BFGS) algorithm and Carlini and Wasgner (CW) attack algorithm. While all effective  at adversarial attacks with extensive research to back them, they did not end up in our final algorithm. The main reason for that is the failure to implement. Either the conversion to R was too complicated or the classifier could still recognize the image. Specifically, XYZ.  
+
+\subsection{Algorithm Design}
+\subsubsection{Genetic Algorithm}
+\noindent Genetic Algorithm is an adversarial attack method that tricks a classifier by mutating input data. 
+In our case, it does this by determining how good each pixel in the picture is, keeping the top pixels, then randomly mutating some proportion of the pixels. The algorithm repeats these steps until enough noise is generated to fool the classifier. 
+\newline\\
+\noindent The team decided to use the Genetic Algorithm because of how well it works with images specifically. After researching the benefits and disadvantages of Genetic Algorithm, we found a study performed by researchers from the University of Maribor, in which they applied this algorithm that created noise to images to fool an image classifier. The output images appeared to have minimal changes to the naked eye, while still containing noise and not passing the classifier's test. This visual proof of image manipulation while still being successful allowed the group to feel confident in our decision to include this algorithm type in our project.
+
+\subsubsection{Particle Swarm Optimization}
+\noindent Particle Swarm Optimization is a population-based algorithm that focuses on finding local optima to perform an adversarial attack 
+
+\subsubsection{Simulated Annealing}
+\subsubsection{Hill Climbing}
+\subsubsection{Fast Gradient Sign Method}
+\subsubsection{Combination of Algorithms and Weighting}
 
 %APPENDICES
 \newpage
 \section{Appendices}
-\subsection{Testing/Correctness/Verification}
+\subsection{Testing, Correctness, and Verification}
+\subsubsection{Testing}
+\subsubsection{Correctness}
+\subsubsection{Verification}
 \subsection{Runtime,
-Complexity and Walltime}
+Complexity, and Walltime}
+\subsubsection{Runtime}
+\subsubsection{Complexity}
+\subsubsection{Walltime}
 \subsection{Performance}
 Justifying efficiency trade-offs in light of performance is crucial,
 so make sure you document all iterations of your algorithm and why you took that specific development path. 
@@ -168,6 +200,13 @@ so make sure you document all iterations of your algorithm and why you took that
 %REFERENCES
 \newpage
 \section{References}
+\begin{enumerate}
+    \item Pavel Tyshevskyi. (2019, September 28). Adversarial Attack Using Genetic Algorithm - Analytics Vidhya - Medium. Medium; Analytics Vidhya. https://medium.com/analytics-vidhya/adversarial-attack-using-genetic-algorithm-90beba13b6cb
+    \item Rok Kukovec , Pecnk, S., Iztok Fister jr, & Sašo Karakatič. (2021, September 13). Adversarial Image Perturbation with a Genetic Algorithm. ResearchGate; unkown. https://www.researchgate.net/publication/354557862_Adversarial_Image_Pertubation_with_a_Genertic_Algorithm
+    \item VisibleBreadcrumbs. (2023). Mathworks.com. https://www.mathworks.com/help/gads/what-is-particle-swarm-optimization.html
 
+‌
+\end{enumerate}
+‌
 
 \end{document}
