@@ -5,10 +5,8 @@ library(reticulate)
 library(GA)
 library(pso)
 library(GenSA)
-library(gradDescent)
 
-#ALGORITHM TEST
-setwd("IE332P2")
+#setwd("IE332P2")
 model<-load_model_tf("./dandelion_model")
 
 #YOUR ALGORITHM HERE==========================
@@ -27,7 +25,7 @@ evaluate_population <- function(image, population) {
     x <- array_reshape(x, c(1, dim(x)))
     x <- x / 255
     pred <- model %>% predict(x)
-    objective <- pred[1, 1] # Assuming class 1 is the target class to fool the classifier
+    objective <- pred[1, 2] # Assuming class 1 is the target class to fool the classifier
     return(objective)
   })
   return(objectives)
@@ -141,10 +139,6 @@ select_pixels <- function(image, pixel_budget) {
 
 
 
-
-setwd("IE332P2")
-model <- load_model_tf("./dandelion_model")
-
 # Placeholder functions for the individual algorithms
 genetic_algorithm <- function(image) {
   # Parameters for the Genetic Algorithm
@@ -183,35 +177,64 @@ genetic_algorithm <- function(image) {
   return(modified_image)
 }
 
+
 particle_swarm_optimization <- function(image) {
   # Parameters for Particle Swarm Optimization
-  swarm_size <- 30
-  num_iterations <- 100
-  w <- 0.7 # Inertia weight
-  c1 <- 2  # Cognitive component weight
-  c2 <- 2  # Social component weight
+  num_particles <- 12
+  num_iterations <- 12
+  w <- 0.7
+  c1 <- 1.5
+  c2 <- 1.5
   
-  # Set up fitness function
-  fitness_function <- function(particles) {
-    # Calculate fitness for each particle
-    fitness_scores <- sapply(particles, function(p) evaluate_particle(image, p))
-    return(fitness_scores)
+  # Initialize particles
+  particles <- initialize_population(image, num_particles)
+  
+  # Initialize particle velocities
+  velocities <- matrix(0, nrow = num_particles, ncol = ncol(particles))
+  
+  # Initialize best individual positions and global best position
+  p_best_positions <- particles
+  p_best_scores <- rep(0, num_particles)
+  g_best_position <- particles[1,]
+  g_best_score <- 0
+  
+  # Iterate through iterations
+  for (iteration in 1:num_iterations) {
+    # Evaluate the fitness of the particles
+    cat("\nIteration: ", iteration, " / ", num_iterations, "\n")
+    fitness_scores <- -evaluate_population(image, particles)
+    
+    # Update the best individual positions and scores
+    better_scores_idx <- fitness_scores > p_best_scores
+    p_best_positions[better_scores_idx,] <- particles[better_scores_idx,]
+    p_best_scores[better_scores_idx] <- fitness_scores[better_scores_idx]
+    
+    # Update the global best position and score
+    if (max(fitness_scores) > g_best_score) {
+      g_best_position <- particles[which.max(fitness_scores),]
+      g_best_score <- max(fitness_scores)
+    }
+    
+    # Update particle velocities
+    r1 <- runif(ncol(particles))
+    r2 <- runif(ncol(particles))
+    cognitive_velocity <- c1 * r1 * (p_best_positions - particles)
+    social_velocity <- c2 * r2 * (matrix(rep(g_best_position, num_particles), nrow = num_particles, byrow = TRUE) - particles)
+    velocities <- w * velocities + cognitive_velocity + social_velocity
+    
+    # Update particle positions
+    particles <- particles + velocities
+    particles <- pmax(pmin(particles, 1), 0) # Clip particle values to [0, 1] range
   }
   
-  # Initialize swarm
-  swarm <- initialize_swarm(image, swarm_size)
-  
-  # Run Particle Swarm Optimization
-  pso_result <- pso::psoptim(swarm_size, fitness_function, num_iterations, w, c1, c2)
-  
-  # Get the best particle
-  best_particle <- pso_result$gbest
-  
-  # Apply the adversarial changes based on the best particle
-  modified_image <- apply_adversarial_changes(image, best_particle)
+  # Apply the adversarial changes based on the global best position
+  modified_image <- apply_adversarial_changes(image, g_best_position)
   
   return(modified_image)
 }
+
+
+
 
 simulated_annealing <- function(image) {
   # Define the objective function
@@ -343,18 +366,18 @@ main_algorithm <- function(image, pixel_budget) {
   result_ga <- genetic_algorithm(image)
   result_pso <- particle_swarm_optimization(image)
   result_sa <- simulated_annealing(image)
-  result_gd <- FGSM_function(image, 0.01)
-  result_rf <- hill_climbing(image)
+  result_fgsm <- fgsm(image)
+  result_hc <- hill_climbing(image)
   
   # Assign optimized weights to the results of the algorithms
-  weights <- c(weight_ga, weight_pso, weight_sa, weight_gd, weight_rf)
+  weights <- c(weight_ga, weight_pso, weight_sa, weight_fgsm, weight_hc)
   
   # Combine the results using the weighted majority classifier
   weighted_results <- result_ga * weights[1] +
     result_pso * weights[2] +
     result_sa * weights[3] +
-    result_gd * weights[4] +
-    result_rf * weights[5]
+    result_fgsm * weights[4] +
+    result_hc * weights[5]
   
   # Determine the final output by selecting the pixels
   # to change based on the weighted results and the pixel budget
@@ -363,34 +386,35 @@ main_algorithm <- function(image, pixel_budget) {
   return(final_output)
 }
 
+
 # Apply the adversarial attack on the test images using the main_algorithm function
-# ...
-
-
-
-#TESTING==========================
-#The images are already classified into the appropriate folders, and you can use
-#the following code after you've modified your images to determine if you made the
-#classifier fail (very similar to what's in the tutorial, only slightly modified
-#to let you check all the images in the grass or dandelion folders, respectively)
-
-res=c("","")
 f=list.files("./grass")
 target_size = c(224, 224)
+accuracy_var <- 0
+loss_var <- 0
 for (i in f){
-  test_image <- image_load(paste("./grass/",i,sep=""),
-                           target_size = target_size)
+  test_image <- image_load(paste("./grass/",i,sep=""), target_size = target_size)
   x <- image_to_array(test_image)
+  
+  #Implementing adversarial attack with just one algorithm
+  cat("\nImage: ", which(f == i), " / ", length(f), "\n")
+  cat("Dimensions of unattacked image: ", dim(x))
+  x <- particle_swarm_optimization(x)
+  cat("Dimensions of attacked image: ", dim(x))
   x <- array_reshape(x, c(1, dim(x)))
   x <- x/255
   pred <- model %>% predict(x)
   if(pred[1,2]<0.50){
     print(i)
   }
+  accuracy_var <- accuracy_var + pred[1,2]
+  loss_var <- loss_var + pred[1,1]
 }
+cat("Attacked Grass Accuracy:", accuracy_var, "Loss:", loss_var, "\n")
 
-res=c("","")
 f=list.files("./dandelions")
+accuracy_var <- 0
+loss_var <- 0
 for (i in f){
   test_image <- image_load(paste("./dandelions/",i,sep=""),
                            target_size = target_size)
@@ -401,5 +425,51 @@ for (i in f){
   if(pred[1,1]<0.50){
     print(i)
   }
+  accuracy_var <- accuracy_var + pred[1,1]
+  loss_var <- loss_var + pred[1,2]
 }
-print(res)
+cat("Attacked Dandelion Accuracy:", accuracy_var, "Loss:", loss_var, "\n")
+
+
+#TESTING==========================
+#The images are already classified into the appropriate folders, and you can use
+#the following code after you've modified your images to determine if you made the
+#classifier fail (very similar to what's in the tutorial, only slightly modified
+#to let you check all the images in the grass or dandelion folders, respectively)
+
+f=list.files("./grass")
+target_size = c(224, 224)
+accuracy_var <- 0
+loss_var <- 0
+for (i in f){
+  test_image <- image_load(paste("./grass/",i,sep=""),
+                           target_size = target_size)
+  x <- image_to_array(test_image)
+  x <- array_reshape(x, c(1, dim(x)))
+  x <- x/255
+  pred <- model %>% predict(x)
+  if(pred[1,2]<0.50){
+    print(i)
+  }
+  accuracy_var <- accuracy_var + pred[1,2]
+  loss_var <- loss_var + pred[1,1]
+}
+cat("Unchanged Grass Accuracy:", accuracy_var, "Loss:", loss_var, "\n")
+
+f=list.files("./dandelions")
+accuracy_var <- 0
+loss_var <- 0
+for (i in f){
+  test_image <- image_load(paste("./dandelions/",i,sep=""),
+                           target_size = target_size)
+  x <- image_to_array(test_image)
+  x <- array_reshape(x, c(1, dim(x)))
+  x <- x/255
+  pred <- model %>% predict(x)
+  if(pred[1,1]<0.50){
+    print(i)
+  }
+  accuracy_var <- accuracy_var + pred[1,1]
+  loss_var <- loss_var + pred[1,2]
+}
+cat("Unchanged Dandelion Model Accuracy:", accuracy_var, "Loss:", loss_var, "\n")
