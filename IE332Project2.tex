@@ -7,6 +7,8 @@
 \usepackage{fancyhdr}
 \usepackage{enumerate}
 \usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{array}
 \usepackage{hyperref,color}
 \usepackage{enumitem,amssymb}
 \newlist{todolist}{itemize}{4}
@@ -174,7 +176,9 @@ In our case, it does this by determining how good each pixel in the picture is, 
 \noindent The team decided to use the Genetic Algorithm because of how well it works with images specifically. After researching the benefits and disadvantages of Genetic Algorithm, we found a study performed by researchers from the University of Maribor, in which they applied this algorithm that created noise to images to fool an image classifier. The output images appeared to have minimal changes to the naked eye, while still containing noise and not passing the classifier's test. This visual proof of image manipulation while still being successful allowed the group to feel confident in our decision to include this algorithm type in our project.
 
 \subsubsection{Particle Swarm Optimization}
-\noindent Particle Swarm Optimization is a population-based algorithm that focuses on finding local optima to perform an adversarial attack 
+\noindent Particle Swarm Optimization is a population-based algorithm that focuses on finding local optima to perform an adversarial attack. The basic steps of the attack are randomly disperse particles onto the image, change the pixel, find a more optimal pixel location, and move toward it. The process repeats as the particles move to an area of the image that, if altered, would maximize the probability of tricking the classifier. Toward the end of the algorithm, the swarm of particles comes together to the optimal location, similar to a flock of birds.
+
+\noindent 
 
 \subsubsection{Simulated Annealing}
 \subsubsection{Hill Climbing}
@@ -186,8 +190,38 @@ In our case, it does this by determining how good each pixel in the picture is, 
 \section{Appendices}
 \subsection{Testing, Correctness, and Verification}
 \subsubsection{Testing}
+When evaluating the effectiveness of our adversarial attack algorithms on the neural network, we looked at the accuracy and robustness. Other testing metrics include perturbation size and transferability; however, we did not have ability to generate additional neural networks nor other adversarial examples. Accuracy is the percentage of correctly classified examples in the test set. We dictated the last 6 images in the provided dandelion and grass image folders to be our test sets. Robustness is the ability of the model to resist adversarial attacks. This metric can be found by comparing the accuracy of the model on the original test set with the accuracy on the model with the adversarially altered test set. The tables on the next page displays a summary of the test cases for before and after the adversarial attacks are implemented. The first table displays the last 6 images for the grass model with the accuracy for before and after. The following table displays the kast 6 images for the dandelion with the same information. \\
+\begin{center}
+\begin{tabular}{|m{5em}|m{8em}|m{11em}|m{11em}|}
+\hline
+Type & Image & Accuracy Before Attacks & Accuracy After Attacks \\
+\hline
+\multirow{6}{4em}{Grass} & \includegraphics[width=30mm, height=15mm]{images/th-246163958.jpg} & 0.9964305 & xx \\ 
+& \includegraphics[width=30mm, height=15mm]{images/th-373883262.jpg} & 0.9906991 & xx \\ 
+& \includegraphics[width=30mm, height=15mm]{images/th-384947726.jpg} & 0.9962944 & xx \\
+& \includegraphics[width=30mm, height=15mm]{images/th-4166387598.jpg} & 0.9992237 & xx \\ 
+& \includegraphics[width=30mm, height=15mm]{images/wheatgrass-2be8422b0eea4c969351410093ccae42-2419490567.jpg} & 0.9787846 & xx \\ 
+& \includegraphics[width=30mm, height=15mm]{images/zoysia-grass-2723693948.jpg} & 0.9982908 & xx \\ 
+\hline
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{|m{5em}|m{8em}|m{11em}|m{11em}|}
+\hline
+Type & Image & Accuracy Before Attacks & Accuracy After Attacks \\
+\hline
+\multirow{6}{4em}{Dandelion} & \includegraphics[width=30mm, height=15mm]{images/th-3423486846.jpg} & 0.9880867 & xx \\ 
+& \includegraphics[width=30mm, height=15mm]{images/th-3992465304.jpg} & 0.9602737 & xx \\ 
+& \includegraphics[width=30mm, height=15mm]{images/th-4103160292.jpg} & 0.9976503 & xx \\
+& \includegraphics[width=30mm, height=15mm]{images/Types_of_Dandelion_600x600-4053252984.jpg} & 0.6243517 & xx \\ 
+& \includegraphics[width=30mm, height=15mm]{images/yellow-18416_960_720-86181412.jpg} & 0.9737037 & xx \\ 
+& \includegraphics[width=30mm, height=15mm]{images/yellow-dandelion-flowers-taraxacum-officinale-spring-sunny-day-blooming-dandelions-field-background-147943753-1959055877.jpg} & 0.9855896 & xx \\ 
+\hline
+\end{tabular}
+\end{center}
 \subsubsection{Correctness}
 \subsubsection{Verification}
+
 \subsection{Runtime,
 Complexity, and Walltime}
 \subsubsection{Runtime}
@@ -204,6 +238,9 @@ so make sure you document all iterations of your algorithm and why you took that
     \item Pavel Tyshevskyi. (2019, September 28). Adversarial Attack Using Genetic Algorithm - Analytics Vidhya - Medium. Medium; Analytics Vidhya. https://medium.com/analytics-vidhya/adversarial-attack-using-genetic-algorithm-90beba13b6cb
     \item Rok Kukovec , Pecnk, S., Iztok Fister jr, & Sašo Karakatič. (2021, September 13). Adversarial Image Perturbation with a Genetic Algorithm. ResearchGate; unkown. https://www.researchgate.net/publication/354557862_Adversarial_Image_Pertubation_with_a_Genertic_Algorithm
     \item VisibleBreadcrumbs. (2023). Mathworks.com. https://www.mathworks.com/help/gads/what-is-particle-swarm-optimization.html
+    \item Wang, D., Tan, D., Liu, & Liu, L. (n.d.). Particle swarm optimization algorithm: an overview. https://kpfu.ru/staff_files/F_1407356997/overview.pdf
+
+‌
 
 ‌
 \end{enumerate}
