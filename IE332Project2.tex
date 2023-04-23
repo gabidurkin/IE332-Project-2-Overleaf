@@ -206,7 +206,7 @@ Type & Image & Accuracy Before Attacks & Accuracy After Attacks \\
 \end{tabular}
 \end{center}
 \begin{center}
-\begin{tabular}{|m{5em}|m{8em}|m{11em}|m{11em}|}
+\begin{tabular}{|m{7em}|m{8em}|m{11em}|m{11em}|}
 \hline
 Type & Image & Accuracy Before Attacks & Accuracy After Attacks \\
 \hline
@@ -221,13 +221,13 @@ Type & Image & Accuracy Before Attacks & Accuracy After Attacks \\
 \end{center}
 \subsubsection{Correctness}
 \subsubsection{Verification}
-Verification is the process of checking whether the attack algorithm meets the specifications or requirements. Here we discuss how the five algorithms are weighted and combined into one main adversarial attack on the provided grass/dandelion classifier to fool it into incorrectly classifying the image by under 50\%. When doing a static analysis of the algorithm, a method of verifying code correctness by analyzing the code without running it XXX. 
+Verification is the process of checking whether the attack algorithm meets the specifications or requirements. Here we discuss how the five algorithms are weighted and combined into one main adversarial attack on the provided grass/dandelion classifier to fool it into incorrectly classifying the image by under 50\%. When doing a static analysis of the algorithm, a method of verifying code correctness by analyzing the code without running it, we found that XYZ. The static analysis tool we used was XYZ. We found this to be helpful when detecting vulnerabilities/weaknesses in our code.  
 \subsection{Runtime,
 Complexity, and Walltime}
 \subsubsection{Runtime}
 \subsubsection{Complexity}
 \subsubsection{Walltime}
-The walltime of the algorithm refers to the actual time elapsed from the start to theend of the algorithm execution. Walltime is an important performace metric 
+The walltime of the algorithm refers to the actual time elapsed from the start to the end of the algorithm execution. Walltime is an important performance metric for adversarial attack algorithms because it can be an important factor when determining the practicality of an attack especially in real-time or time-sensitive applications. The walltime is effected by the implementation of the algorithm, which computational resources are used and the complexity of the targeted neural network. The walltime of our algorithm ended up being XXX. We interpreted this as fairly good for the size of the neural network and purpose of the attack.  
 \subsection{Performance}
 Justifying efficiency trade-offs in light of performance is crucial,
 so make sure you document all iterations of your algorithm and why you took that specific development path. 
@@ -235,16 +235,40 @@ so make sure you document all iterations of your algorithm and why you took that
 %REFERENCES
 \newpage
 \section{References}
-\begin{enumerate}
-    \item Pavel Tyshevskyi. (2019, September 28). Adversarial Attack Using Genetic Algorithm - Analytics Vidhya - Medium. Medium; Analytics Vidhya. https://medium.com/analytics-vidhya/adversarial-attack-using-genetic-algorithm-90beba13b6cb
-    \item Rok Kukovec , Pecnk, S., Iztok Fister jr, & Sašo Karakatič. (2021, September 13). Adversarial Image Perturbation with a Genetic Algorithm. ResearchGate; unkown. https://www.researchgate.net/publication/354557862_Adversarial_Image_Pertubation_with_a_Genertic_Algorithm
-    \item VisibleBreadcrumbs. (2023). Mathworks.com. https://www.mathworks.com/help/gads/what-is-particle-swarm-optimization.html
-    \item Wang, D., Tan, D., Liu, & Liu, L. (n.d.). Particle swarm optimization algorithm: an overview. https://kpfu.ru/staff_files/F_1407356997/overview.pdf
+\begin{thebibliography}{9}
 
-‌
+\bibitem{balda2019adversarial}
+Balda, E. R., Behboodi, A., \& Mathar, R. (2019). Adversarial examples in deep neural networks: An overview. Deep Learning: Algorithms and Applications, 31–65. https://doi.org/10.1007/978-3-030-31760-7\_2
 
-‌
-\end{enumerate}
-‌
+\bibitem{brownlee2021simulated}
+Brownlee, J. (2021, October 11). Simulated annealing from scratch in Python. Machine Learning Mastery. Retrieved April 23, 2023, from https://machinelearningmastery.com/simulated-annealing-from-scratch-in-python/
 
+\bibitem{carlini2017towards}
+Carlini, N., \& Wagner, D. (2017). Towards evaluating the robustness of neural networks. 2017 IEEE Symposium on Security and Privacy (SP). https://doi.org/10.1109/sp.2017.49
+
+\bibitem{goodfellow2015explaining}
+Goodfellow, I. J., Shlens, J., \& Szegedy, C. (2015). Explaining and Harnessing Adversarial Examples. ICLR. https://doi.org/arXiv:1412.6572v3
+
+\bibitem{mallawaarachchi2020introduction}
+Mallawaarachchi, V. (2020, March 1). Introduction to genetic algorithms. Medium. Retrieved April 23, 2023, from https://towardsdatascience.com/introduction-to-genetic-algorithms-including-example-code-e396e98d8bf3
+
+\bibitem{tyshevskyi2019adversarial}
+Pavel Tyshevskyi. (2019, September 28). Adversarial Attack Using Genetic Algorithm - Analytics Vidhya - Medium. Medium; Analytics Vidhya. https://medium.com/analytics-vidhya/adversarial-attack-using-genetic-algorithm-90beba13b6cb
+
+\bibitem{ren2020adversarial}
+Ren, K., Zheng, T., Qin, Z., \& Liu, X. (2020). Adversarial attacks and defenses in Deep Learning. Engineering, 6(3), 346–360. https://doi.org/10.1016/j.eng.2019.12.012
+
+\bibitem{kukovec2021adversarial}
+Rok Kukovec, Pecnk, S., Iztok Fister jr, \& Sašo Karakatič. (2021, September 13). Adversarial Image Perturbation with a Genetic Algorithm. ResearchGate; unknown. https://www.researchgate.net/publication/354557862\_Adversarial\_Image\_Pertubation\_with\_a\_Genertic\_\\Algorithm
+
+\bibitem{tam2021gentle}
+Tam, A. (2021, October 11). A gentle introduction to particle swarm optimization. Machine Learning Mastery. Retrieved April 23, 2023, from https://machinelearningmastery.com/a-gentle-introduction-to-particle-swarm-optimization/
+
+\bibitem{visiblebreadcrumbs}
+VisibleBreadcrumbs. (2023). Mathworks.com. https://www.mathworks.com/help/gads/what-is-particle-swarm-optimization.html
+
+\bibitem{wang}
+Wang, D., Tan, D., Liu, \& Liu, L. (n.d.). Particle swarm optimization algorithm: an overview. https://kpfu.ru/staff\_files/F\_1407356997/overview.pdf
+
+\end{thebibliography}
 \end{document}
