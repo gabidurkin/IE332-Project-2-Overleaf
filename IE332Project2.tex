@@ -132,15 +132,11 @@ Accountable together -- we are Purdue.''}
 
 
 \begin{document}
-
-
 \addcoversheet
 \addtodo
-
 \pagebreak
 \tableofcontents
 \pagebreak
-
 
 % BEGIN YOUR ASSIGNMENT HERE:
 \def\Plus{\texttt{+}}
@@ -211,6 +207,8 @@ In our case, it does this by determining how good each pixel in the picture is, 
 \subsection{Testing, Correctness, and Verification}
 \subsubsection{Testing}
 When evaluating the effectiveness of our adversarial attack algorithms on the neural network, we looked at the accuracy and robustness. Other testing metrics include perturbation size and transferability; however, we did not have the ability to generate additional neural networks nor other adversarial examples. Accuracy is the percentage of correctly classified examples in the test set. We dictated the last 6 images in the provided dandelion and grass image folders to be our test sets. Robustness is the ability of the model to resist adversarial attacks. This metric can be found by comparing the accuracy of the model on the original test set with the accuracy on the model with the adversarially altered test set. The tables on the next page displays a summary of the test cases for before and after the adversarial attacks are implemented. The first table displays the last 6 images for the grass model with the accuracy for before and after. The following table displays the last 6 images for the dandelion with the same information. \\
+
+
 \begin{center}
 \begin{tabular}{|m{5em}|m{8em}|m{11em}|m{11em}|}
 \hline
@@ -226,6 +224,10 @@ Type & Image & Accuracy Before Attacks & Accuracy After Attacks \\
 \end{tabular}
 \end{center}
 \begin{center}
+Table 1. Grass Image Accuracy Before and After Attacks
+\end{center}
+
+\begin{center}
 \begin{tabular}{|m{7em}|m{8em}|m{11em}|m{11em}|}
 \hline
 Type & Image & Accuracy Before Attacks & Accuracy After Attacks \\
@@ -239,27 +241,40 @@ Type & Image & Accuracy Before Attacks & Accuracy After Attacks \\
 \hline
 \end{tabular}
 \end{center}
+\begin{center}
+Table 2. Dandelion Image Accuracy Before and After Attacks
+\end{center}
 \subsubsection{Correctness}
-An adversarial attack deliberate method of manipulating an image to deceive the predictions of a machine learning model. The effectiveness of an attack is measured by its ability to mislead the model while also maintaining the visual appearance of the original image. In the table provided, the accuracy of the model in predicting whether an image depicts grass or dandelions was significantly reduced after applying various adversarial attack algorithms, including genetic algorithm, particle swarm optimization, simulated annealing, hill climbing, and fast gradient sign method. Prior to the attack, the model demonstrated excellent accuracy with a minimum prediction accuracy of 96\% for all images except one. The decrease of accuracy shown by the model after the application of adversarial attacks demonstrates the effectiveness of  the algorithms we chose to use and also potential threats attackers can take advantage of when trying to compromise the performance of a machine learning model.
+An adversarial attack deliberate method of manipulating an image to deceive the predictions of a machine learning model. The effectiveness of an attack is measured by its ability to mislead the model while also maintaining the visual appearance of the original image. In the table provided, the accuracy of the model in predicting whether an image depicts grass or dandelions was significantly reduced after applying various adversarial attack algorithms, including genetic algorithm, particle swarm optimization, simulated annealing, hill climbing, and fast gradient sign method. Prior to the attack, the model demonstrated excellent accuracy with a minimum prediction accuracy of 96\% for all images except one. The decrease in accuracy shown by the model after the application of adversarial attacks demonstrates the effectiveness of  the algorithms we chose to use and also potential threats attackers can take advantage of when trying to compromise the performance of a machine learning model.
 \subsubsection{Verification}
 Verification is the process of checking whether the attack algorithm meets the specifications or requirements. Here we discuss how we would verify the five sub-algorithms that are weighted and combined into one main adversarial attack on the provided grass/dandelion classifier to fool it into incorrectly classifying the image by under 50\%. The tool we would use to verify the code is a static analysis. A static analysis of the algorithm is a method of verifying code correctness by analyzing the code without running it. The tool we would have used is the Lintr package on R. "Lint, or linting, is a tool that analyses source code to flag programming errors, bugs, stylistic errors, and suspicious constructs" (Nicholls, 2023). The package will check for and report syntax errors and possible semantic issues. We found this would be helpful when detecting vulnerabilities/weaknesses in our code.  
+
 \subsection{Runtime,
 Complexity, and Walltime}
+
 \subsubsection{Runtime}
+
 \subsubsection{Complexity}
-The complexity of adversarial attacks refers to the amount of computational resources, time, and effort required to generate adversarial examples that can effectively trick machine learning models. It is a measure of how difficult it is to perform an attack and how much computational power is needed to create effective adversarial examples. The complexity of our adversarial attack algorithm that uses genetic algorithm, particle swarm optimization, simulated annealing, hill climbing, and fast gradient sign method depends on various factors. Generally speaking, the complexity of these algorithms is high because they are iterative and have a large number of possible solutions. Genetic algorithm and particle swarm optimization are computationally expensive as they require evaluating each pixel of an image looking for the most optimal solution. Simulated annealing and hill climbing methods are less complex as they evaluate neighboring solutions in order to find the optimal solution, meaning they most likely will not evalu
+The complexity of adversarial attacks refers to the degree of computational resources, time, and effort needed to create adversarial examples that can effectively deceive machine learning models. It measures the difficulty of performing an attack and the computational power required to produce effective adversarial examples. Our adversarial attack algorithm that utilizes genetic algorithm, particle swarm optimization, simulated annealing, hill climbing, and fast gradient sign method exhibits a high level of complexity due to its iterative nature and large number of possible solutions. While genetic algorithm and particle swarm optimization are computationally expensive since they evaluate each pixel of an image to find the optimal solution, simulated annealing and hill climbing methods are less complex as they focus on evaluating neighboring solutions to identify the most effective one. The fast gradient sign method, on the other hand, is relatively simpler but still involves computing gradients and applying small perturbations to the input image. Overall, the use of these algorithms can be computationally demanding, and therefore it requires us to strike a balance between the complexity and effectiveness of each method.
 \subsubsection{Walltime}
+
 The walltime of the algorithm refers to the actual time elapsed from the start to the end of the algorithm execution (Kuo, 2020). Walltime is an important performance metric for adversarial attack algorithms because it is a big factor when determining the practicality of an attack especially in real-time or time-sensitive applications. The walltime is effected by the implementation of the algorithm, which computational resources are used and the complexity of the targeted neural network. The walltime of our algorithm ended up being XXX. We interpreted this as fairly good for the size of the neural network and purpose of the attack.  
 \subsection{Performance}
 Justifying efficiency trade-offs in light of performance is crucial,
 so make sure you document all iterations of your algorithm and why you took that specific development path. 
 
-Using the scoring equation, $\sum_{n=$ where 
+We used the following scoring equation, $\sum_{b=1}^{0.01*P} f * \frac{P}{b}$, where P is the number of pixels in the image and f is the number of successfully fooled images at a given budget level b, to determine our algorithm performance. 
 
 %REFERENCES
 \newpage
 \section{References}
 \begin{thebibliography}{9}
+
+\bibitem{Abbas}
+Abbas, A. K. (2011). Fuzzy logic control in support of autonomous navigation of humanitarian de-mining robots. Elsevier EBooks, 453–475. https://doi.org/10.1533/9780857090201.4.453
+
+\bibitem{ansah}
+Ansah, H. (2022, July 21). Adversarial Attacks on Neural Networks: Exploring the Fast Gradient Sign Method - neptune.ai. Neptune.ai. https://neptune.ai/blog/adversarial-attacks-on-neural-networks-exploring-the-fast-gradient-sign-method
 
 \bibitem{balda2019adversarial}
 Balda, E. R., Behboodi, A., \& Mathar, R. (2019). Adversarial examples in deep neural networks: An overview. Deep Learning: Algorithms and Applications, 31–65. https://doi.org/10.1007/978-3-030-31760-7\_2
@@ -294,21 +309,14 @@ Rok Kukovec, Pecnk, S., Iztok Fister jr, \& Sašo Karakatič. (2021, September 1
 \bibitem{tam2021gentle}
 Tam, A. (2021, October 11). A gentle introduction to particle swarm optimization. Machine Learning Mastery. Retrieved April 23, 2023, from https://machinelearningmastery.com/a-gentle-introduction-to-particle-swarm-optimization/
 
+‌\bibitem{tsui}
+Tsui, K. (2018, August 20). Perhaps the Simplest Introduction of Adversarial Examples Ever. Medium; Towards Data Science. https://towardsdatascience.com/perhaps-the-simplest-introduction-of-adversarial-examples-ever-c0839a759b8d
+
 \bibitem{visiblebreadcrumbs}
 VisibleBreadcrumbs. (2023). Mathworks.com. https://www.mathworks.com/help/gads/what-is-particle-swarm-optimization.html
 
 \bibitem{wang}
 Wang, D., Tan, D., Liu, \& Liu, L. (n.d.). Particle swarm optimization algorithm: an overview. https://kpfu.ru/staff\_files/F\_1407356997/overview.pdf
-
-\bibitem{Abbas}
-Abbas, A. K. (2011). Fuzzy logic control in support of autonomous navigation of humanitarian de-mining robots. Elsevier EBooks, 453–475. https://doi.org/10.1533/9780857090201.4.453
-
-‌\bibitem{tsui}
-Tsui, K. (2018, August 20). Perhaps the Simplest Introduction of Adversarial Examples Ever. Medium; Towards Data Science. https://towardsdatascience.com/perhaps-the-simplest-introduction-of-adversarial-examples-ever-c0839a759b8d
-
-\bibitem{ansah}
-Ansah, H. (2022, July 21). Adversarial Attacks on Neural Networks: Exploring the Fast Gradient Sign Method - neptune.ai. Neptune.ai. https://neptune.ai/blog/adversarial-attacks-on-neural-networks-exploring-the-fast-gradient-sign-method
-
 ‌
 \end{thebibliography}
 \end{document}
