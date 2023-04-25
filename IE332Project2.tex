@@ -168,29 +168,35 @@ one should then be merged into main.
 \newline\\
 \noindent Sub-algorithms we also looked includes the DeepFool algorithm, Broyden-Flectcher-Goldfard-Shanno (L-BFGS) algorithm and Carlini and Wasgner (CW) attack algorithm. While all effective  at adversarial attacks with extensive research to back them, they did not end up in our final algorithm. The main reason for that is the failure to implement. Either the conversion to R was too complicated or the classifier could still recognize the image. Specifically, XYZ.  
 
-\subsection{Algorithm Design}
-\subsubsection{Genetic Algorithm}
+\section{Algorithm Design}
+\subsection{Genetic Algorithm}
 \noindent Genetic Algorithm is an adversarial attack method that tricks a classifier by mutating input data. 
 In our case, it does this by determining how good each pixel in the picture is, keeping the top pixels, then randomly mutating some proportion of the pixels. The algorithm repeats these steps until enough noise is generated to fool the classifier. 
 \newline\\
 \noindent The team decided to use the Genetic Algorithm because of how well it works with images specifically. After researching the benefits and disadvantages of Genetic Algorithm, we found a study performed by researchers from the University of Maribor, in which they applied this algorithm that created noise to images to fool an image classifier. The output images appeared to have minimal changes to the naked eye, while still containing noise and not passing the classifier's test. This visual proof of image manipulation while still being successful allowed the group to feel confident in our decision to include this algorithm type in our project.
 
-\subsubsection{Particle Swarm Optimization}
+\subsection{Particle Swarm Optimization}
 \noindent Particle Swarm Optimization is a population-based algorithm that focuses on finding local optima to perform an adversarial attack. The basic steps of the attack are: randomly disperse particles onto the pixels of an image, change the pixel where a particle lands, find a more optimal pixel location, and move toward it. The process repeats as the particles move to an area of the image that, if altered, would maximize the probability of tricking the classifier. Toward the end of the algorithm, the swarm of particles comes together to the optimal location, similar to a flock of birds.
 \newline\\
 \noindent The team decided to utilize Particle Swarm Optimization because of how quickly the algorithm is at finding a solution. According to project guidelines, the classifier must the fooled in less than ten seconds per image. Therefore, as a team, we decided to focus some algorithms on speed and some on accuracy, with the weighted combination optimizing the usage of both. POS will speed up our overall average run time, while also retaining a good solution.
 
-\subsubsection{Simulated Annealing}
+\subsection{Simulated Annealing}
 \noindent Simulated Annealing is a heuristic algorithm that can be used to trick an image classifier through making small changes to the original image. If the new image fools the classifier, this iteration is kept as the new original and another change is made to increase the inaccuracy of the classifier. If the new image does not fool the classifier, a different aspect of the image is changed and the iteration is repeated. Once the attack has maximized its changes to the picture to trick the classifier, while also making sure the image is still similar enough to the original that the naked eye would not notice, the algorithm stops.
 \newline\\
 \noindent The team decided to use simulated annealing in our main algorithm because of it's ability to avoid noise and find a global optimum. A sub-algorithm focused on finding the best possible solution is important in developing a weighted program that breaks an image classifier with optimal speed and accuracy.
 
-\subsubsection{Hill Climbing}
+\subsection{Hill Climbing}
 \noindent A team of researchers might use the hill-climbing algorithm in R to complete a project that helps change the pixels from a preexisting image into a new image because it is a heuristic search algorithm that is well-suited for optimization problems like image processing. Hill-climbing algorithm starts with an initial solution and iteratively explores its neighboring solutions, selecting the one that improves the objective function. In image processing, the objective function can be the similarity measure between the original image and the modified image. By using the hill-climbing algorithm, the researchers can efficiently find the optimal set of pixel values that create a new image with desired features, such as increased contrast or reduced noise.
 \newline\\
 \noindent 
-\subsubsection{Fast Gradient Sign Method}
-\subsubsection{Combination of Algorithms and Weighting}
+
+\subsection{Fast Gradient Sign Method}
+\noindent Fast Gradient Sign Method is a type of adversarial attack that works well with data that clusters and has a decision boundary that classifies between images. This algorithm works by implementing noise to the input picture on the same gradient that the boundary line lies on. The loss function is calculated to find the direction in which the maximum loss will occur. Next, noise is injected to change pixels in that direction. The purpose of the noise is to push the image classification over the decision boundary and into the cluster of opposite classifications in order to fool the classifier. 
+\newline\\
+\noindent Our group decided to choose FGSM because of how fast and easy it is to implement. This algorithm exploits the weaknesses of images that the image classifier cannot classify with high accuracy. Fast gradient sign method is also applicable to a wide variety of pictures so that many images could be used to test the accuracy of this adversarial attack.
+
+\subsection{Combination of Algorithms and Weighting}
+
 
 %APPENDICES
 \newpage
@@ -280,5 +286,15 @@ VisibleBreadcrumbs. (2023). Mathworks.com. https://www.mathworks.com/help/gads/w
 \bibitem{wang}
 Wang, D., Tan, D., Liu, \& Liu, L. (n.d.). Particle swarm optimization algorithm: an overview. https://kpfu.ru/staff\_files/F\_1407356997/overview.pdf
 
+\bibitem{Abbas}
+Abbas, A. K. (2011). Fuzzy logic control in support of autonomous navigation of humanitarian de-mining robots. Elsevier EBooks, 453–475. https://doi.org/10.1533/9780857090201.4.453
+
+‌\bibitem{tsui}
+Tsui, K. (2018, August 20). Perhaps the Simplest Introduction of Adversarial Examples Ever. Medium; Towards Data Science. https://towardsdatascience.com/perhaps-the-simplest-introduction-of-adversarial-examples-ever-c0839a759b8d
+
+\bibitem{ansah}
+Ansah, H. (2022, July 21). Adversarial Attacks on Neural Networks: Exploring the Fast Gradient Sign Method - neptune.ai. Neptune.ai. https://neptune.ai/blog/adversarial-attacks-on-neural-networks-exploring-the-fast-gradient-sign-method
+
+‌
 \end{thebibliography}
 \end{document}
