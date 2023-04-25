@@ -68,16 +68,16 @@ Accountable together -- we are Purdue.''}
 \begin{table}[h!]
   \begin{center}
     \label{tab:table1}
-    \begin{tabular}{c|ccc|c|c}
-      Student & Research/Planning & Algorithm & Overleaf  & Overall & DIFF\\
+    \begin{tabular}{c|m{5em}m{5em}m{5em}m{5em}m{4em}|c|c}
+      Student & Algorithm Development & Complexity Analysis & Implemen-tation & Performance Analysis/Testing & Report & Overall & DIFF\\
       \hline
-      Gabi & x & x & x & x & x\\
-      Haley & x & x & x & x & x\\
-      Declan & x & x & x & x & x\\
-      Ben & x & x & x & x & x\\
-      Rohan & x & x & x & x & x\\
+      Gabi & x & x & x & x & x & x& x\\
+      Haley & x & x & x & x & x & x & x\\
+      Declan & x & x & x & x & x & x & x\\
+      Ben & x & x & x & x & x & x & x\\
+      Rohan & x & x & x & x & x & x & x\\
       \hline
-      St Dev & x & x & x & x & x 
+      St Dev & x & x & x & x & x & x & x
     \end{tabular}
   \end{center}
 \end{table}
@@ -166,7 +166,7 @@ one should then be merged into main.
 \newline\\
 \noindent The final algorithm the team utilized is Fast Gradient Sign Method, which is an adversarial attack that stretches a weak point in the input data to confuse a classifier. This algorithm was implemented because of its simplicity in only needing to be run once forward and backward through the model.
 \newline\\
-\noindent Sub-algorithms we also looked includes the DeepFool algorithm, Fast Gradient Sign Method (FGSM) algorithm, Broyden-Flectcher-Goldfard-Shanno (L-BFGS) algorithm and Carlini and Wasgner (CW) attack algorithm. While all effective  at adversarial attacks with extensive research to back them, they did not end up in our final algorithm. The main reason for that is the failure to implement. Either the conversion to R was too complicated or the classifier could still recognize the image. Specifically, XYZ.  
+\noindent Sub-algorithms we also looked includes the DeepFool algorithm, Broyden-Flectcher-Goldfard-Shanno (L-BFGS) algorithm and Carlini and Wasgner (CW) attack algorithm. While all effective  at adversarial attacks with extensive research to back them, they did not end up in our final algorithm. The main reason for that is the failure to implement. Either the conversion to R was too complicated or the classifier could still recognize the image. Specifically, XYZ.  
 
 \subsection{Algorithm Design}
 \subsubsection{Genetic Algorithm}
@@ -176,12 +176,19 @@ In our case, it does this by determining how good each pixel in the picture is, 
 \noindent The team decided to use the Genetic Algorithm because of how well it works with images specifically. After researching the benefits and disadvantages of Genetic Algorithm, we found a study performed by researchers from the University of Maribor, in which they applied this algorithm that created noise to images to fool an image classifier. The output images appeared to have minimal changes to the naked eye, while still containing noise and not passing the classifier's test. This visual proof of image manipulation while still being successful allowed the group to feel confident in our decision to include this algorithm type in our project.
 
 \subsubsection{Particle Swarm Optimization}
-\noindent Particle Swarm Optimization is a population-based algorithm that focuses on finding local optima to perform an adversarial attack. The basic steps of the attack are randomly disperse particles onto the image, change the pixel, find a more optimal pixel location, and move toward it. The process repeats as the particles move to an area of the image that, if altered, would maximize the probability of tricking the classifier. Toward the end of the algorithm, the swarm of particles comes together to the optimal location, similar to a flock of birds.
-
-\noindent 
+\noindent Particle Swarm Optimization is a population-based algorithm that focuses on finding local optima to perform an adversarial attack. The basic steps of the attack are: randomly disperse particles onto the pixels of an image, change the pixel where a particle lands, find a more optimal pixel location, and move toward it. The process repeats as the particles move to an area of the image that, if altered, would maximize the probability of tricking the classifier. Toward the end of the algorithm, the swarm of particles comes together to the optimal location, similar to a flock of birds.
+\newline\\
+\noindent The team decided to utilize Particle Swarm Optimization because of how quickly the algorithm is at finding a solution. According to project guidelines, the classifier must the fooled in less than ten seconds per image. Therefore, as a team, we decided to focus some algorithms on speed and some on accuracy, with the weighted combination optimizing the usage of both. POS will speed up our overall average run time, while also retaining a good solution.
 
 \subsubsection{Simulated Annealing}
+\noindent Simulated Annealing is a heuristic algorithm that can be used to trick an image classifier through making small changes to the original image. If the new image fools the classifier, this iteration is kept as the new original and another change is made to increase the inaccuracy of the classifier. If the new image does not fool the classifier, a different aspect of the image is changed and the iteration is repeated. Once the attack has maximized its changes to the picture to trick the classifier, while also making sure the image is still similar enough to the original that the naked eye would not notice, the algorithm stops.
+\newline\\
+\noindent The team decided to use simulated annealing in our main algorithm because of it's ability to avoid noise and find a global optimum. A sub-algorithm focused on finding the best possible solution is important in developing a weighted program that breaks an image classifier with optimal speed and accuracy.
+
 \subsubsection{Hill Climbing}
+\noindent A team of researchers might use the hill-climbing algorithm in R to complete a project that helps change the pixels from a preexisting image into a new image because it is a heuristic search algorithm that is well-suited for optimization problems like image processing. Hill-climbing algorithm starts with an initial solution and iteratively explores its neighboring solutions, selecting the one that improves the objective function. In image processing, the objective function can be the similarity measure between the original image and the modified image. By using the hill-climbing algorithm, the researchers can efficiently find the optimal set of pixel values that create a new image with desired features, such as increased contrast or reduced noise.
+\newline\\
+\noindent 
 \subsubsection{Fast Gradient Sign Method}
 \subsubsection{Combination of Algorithms and Weighting}
 
@@ -221,13 +228,13 @@ Type & Image & Accuracy Before Attacks & Accuracy After Attacks \\
 \end{center}
 \subsubsection{Correctness}
 \subsubsection{Verification}
-Verification is the process of checking whether the attack algorithm meets the specifications or requirements. Here we discuss how the five algorithms are weighted and combined into one main adversarial attack on the provided grass/dandelion classifier to fool it into incorrectly classifying the image by under 50\%. When doing a static analysis of the algorithm, a method of verifying code correctness by analyzing the code without running it, we found that XYZ. The static analysis tool we used was XYZ. We found this to be helpful when detecting vulnerabilities/weaknesses in our code.  
+Verification is the process of checking whether the attack algorithm meets the specifications or requirements. Here we discuss how the five algorithms are weighted and combined into one main adversarial attack on the provided grass/dandelion classifier to fool it into incorrectly classifying the image by under 50\%. When doing a static analysis of the algorithm, a method of verifying code correctness by analyzing the code without running it, we found that XYZ. The static analysis tool we used was the Lintr package. We found this to be helpful when detecting vulnerabilities/weaknesses in our code.  
 \subsection{Runtime,
 Complexity, and Walltime}
 \subsubsection{Runtime}
 \subsubsection{Complexity}
 \subsubsection{Walltime}
-The walltime of the algorithm refers to the actual time elapsed from the start to the end of the algorithm execution. Walltime is an important performance metric for adversarial attack algorithms because it can be an important factor when determining the practicality of an attack especially in real-time or time-sensitive applications. The walltime is effected by the implementation of the algorithm, which computational resources are used and the complexity of the targeted neural network. The walltime of our algorithm ended up being XXX. We interpreted this as fairly good for the size of the neural network and purpose of the attack.  
+The walltime of the algorithm refers to the actual time elapsed from the start to the end of the algorithm execution. Walltime is an important performance metric for adversarial attack algorithms because it is a big factor when determining the practicality of an attack especially in real-time or time-sensitive applications. The walltime is effected by the implementation of the algorithm, which computational resources are used and the complexity of the targeted neural network. The walltime of our algorithm ended up being XXX. We interpreted this as fairly good for the size of the neural network and purpose of the attack.  
 \subsection{Performance}
 Justifying efficiency trade-offs in light of performance is crucial,
 so make sure you document all iterations of your algorithm and why you took that specific development path. 
@@ -251,6 +258,9 @@ Goodfellow, I. J., Shlens, J., \& Szegedy, C. (2015). Explaining and Harnessing 
 
 \bibitem{mallawaarachchi2020introduction}
 Mallawaarachchi, V. (2020, March 1). Introduction to genetic algorithms. Medium. Retrieved April 23, 2023, from https://towardsdatascience.com/introduction-to-genetic-algorithms-including-example-code-e396e98d8bf3
+
+\bibitem{nicholls2023linting}
+Nicholls, R. (2023). Introduction to R:linting R (and R markdown). Introduction to R: Linting R (and R Markdown). Retrieved April 24, 2023, from https://rowannicholls.github.io/R/intro/linting.html 
 
 \bibitem{tyshevskyi2019adversarial}
 Pavel Tyshevskyi. (2019, September 28). Adversarial Attack Using Genetic Algorithm - Analytics Vidhya - Medium. Medium; Analytics Vidhya. https://medium.com/analytics-vidhya/adversarial-attack-using-genetic-algorithm-90beba13b6cb
