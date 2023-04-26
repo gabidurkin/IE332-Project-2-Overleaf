@@ -146,6 +146,8 @@ Accountable together -- we are Purdue.''}
 \subsection{Executive Summary}
 \noindent This report details Team 4's efforts toward the completion of IE332's Project 2. The team attempted to complete this machine learning program through a five-subsection algorithm that fools an image classifier while following the given constraints. 
 
+\\DO WE WRITE ABOUT HOW THE THOUGHT PROCESS OF THE CODE/THE OUTCOME OF IT NOT FULLY FOOLING THE ALGORITHM 
+
 \subsection{Problem Statement}
 \noindent Project 2 presented the team with a problem regarding a binary image classifier. The team is responsible for building and manipulating a majority voting classifier that weights the use of five sub-algorithms that must perform adversarial attacks on the given classifier. The purpose of these attacks is to trick the classifier into incorrectly classifying images. the team must complete this task in under ten seconds per image and without changing the input images enough that the naked eye would notice a difference.
 
@@ -163,9 +165,9 @@ Accountable together -- we are Purdue.''}
 \newline\\
 \noindent The final algorithm the team utilized is Fast Gradient Sign Method, which is an adversarial attack that stretches a weak point in the input data to confuse a classifier. This algorithm was implemented because of its simplicity in only needing to be run once forward and backward through the model.
 \newline\\
-\noindent Sub-algorithms we also looked includes the DeepFool algorithm, Gradient Descent, Broyden-Flectcher-Goldfard-Shanno (L-BFGS) algorithm and Carlini and Wasgner (CW) attack algorithm. While all are effective at adversarial attacks with extensive research to back them, they did not end up in our final algorithm. The main reason for that is the failure to implement. Either the conversion to R was too complicated or the classifier could still recognize the image at a higher than 50\% accuracy. Gradient Descent is another algorithm we looked to implement; however, it did not have an R library.   
+\noindent Sub-algorithms we also looked includes the DeepFool algorithm, Gradient Descent, Broyden-Flectcher-Goldfard-Shanno (L-BFGS) algorithm and Carlini and Wasgner (CW) attack algorithm. While all are effective at adversarial attacks with extensive research to back them, they did not end up in our final algorithm. The main reason for that is the failure to implement. Although our algorithm ultimately was not able to fool the classifier, the algorithms mentioned did not have a easy conversion to R. 
 
-\section{Majority Voting Classifier Design}
+\section{Majority Classifier Design}
 
 \noindent All experimental variants of your
 algorithm (e.g. with different sub-algorithms, and so forth) should be tracked with separate branches and the best
@@ -190,7 +192,7 @@ In our case, it does this by determining how good each pixel in the picture is, 
 \subsection{Hill Climbing}
 \noindent A team of researchers might use the hill-climbing algorithm in R to complete a project that helps change the pixels from a preexisting image into a new image because it is a heuristic search algorithm that is well-suited for optimization problems like image processing. Hill-climbing algorithm starts with an initial solution and iteratively explores its neighboring solutions, selecting the one that improves the objective function. In image processing, the objective function can be the similarity measure between the original image and the modified image. By using the hill-climbing algorithm, the researchers can efficiently find the optimal set of pixel values that create a new image with desired features, such as increased contrast or reduced noise.
 \newline\\
-\noindent In R, we used the hill climbing algorithm can be implemented efficiently using matrix operations and vectorization. This makes it fast and scalable for processing large images. Additionally, since R provides many libraries and functions for image processing, it made it easy for us to integrate the hill climbing algorithm into a larger workflow. Overall, using the hill climbing algorithm in R can be a powerful tool for improving image quality.
+\noindent In R, we used the hill climbing algorithm because it can be implemented efficiently using matrix operations and vectorization. This makes it fast and scalable for processing large images. Additionally, since R provides many libraries and functions for image processing, it made it easy for us to integrate the hill climbing algorithm into a larger workflow. Overall, using the hill climbing algorithm in R can be a powerful tool for improving image quality.
 
 \subsection{Fast Gradient Sign Method}
 \noindent Fast Gradient Sign Method is a type of adversarial attack that works well with data that clusters and has a decision boundary that classifies between images (Tsui, 2018). This algorithm works by implementing noise to the input picture on the same gradient that the boundary line lies on. The loss function is calculated to find the direction in which the maximum loss will occur. Next, noise is injected to change pixels in that direction (Ansah, 2022). The purpose of the noise is to push the image classification over the decision boundary and into the cluster of opposite classifications in order to fool the classifier. 
@@ -198,15 +200,19 @@ In our case, it does this by determining how good each pixel in the picture is, 
 \noindent Our group decided to choose FGSM because of how fast and easy it is to implement. This algorithm exploits the weaknesses of images that the image classifier cannot classify with high accuracy. Fast gradient sign method is also applicable to a wide variety of pictures so that many images could be used to test the accuracy of this adversarial attack.
 
 \subsection{Combination of Sub-Algorithms and Weighting}
+IS THIS WHERE WE DISCUSS THE PROCESS OF THE CODE AND HOW IT COMES TOGETHER?
 
-
+\section{Implementation}
+\subsection{What was Supposed to Happen}
+\noindent 
+\subsection{What Happened and Why}
 
 %APPENDICES
 \newpage
 \section{Appendices}
 \subsection{Testing, Correctness, and Verification}
 \subsubsection{Testing}
-When evaluating the effectiveness of our adversarial attack algorithms on the neural network, we looked at the accuracy and robustness. Other testing metrics include perturbation size and transferability; however, we did not have the ability to generate additional neural networks nor other adversarial examples. Accuracy is the percentage of correctly classified examples in the test set. We dictated the last 6 images in the provided dandelion and grass image folders to be our test sets. Robustness is the ability of the model to resist adversarial attacks. This metric can be found by comparing the accuracy of the model on the original test set with the accuracy on the model with the adversarially altered test set. The tables on the next page displays a summary of the test cases for before and after the adversarial attacks are implemented. The first table displays the last 6 images for the grass model with the accuracy for before and after. The following table displays the last 6 images for the dandelion with the same information. \\
+When evaluating the effectiveness of our adversarial attack algorithms on the neural network, we looked at the accuracy and robustness. Other testing metrics include perturbation size and transferability; however, we did not have the ability to generate additional neural networks nor other adversarial examples. Accuracy is the percentage of correctly classified examples in the test set. We dictated the last 6 images in the provided dandelion and grass image folders to be our test sets. Robustness is the ability of the model to resist adversarial attacks. This metric can be found by comparing the accuracy of the model on the original test set with the accuracy on the model with the adversarially altered test set. Although our algorithm did not fully fool the classfier, we were able to alter the accuracy a bit. The tables on the next page displays a summary of the test cases for before and after the adversarial attacks are implemented. The first table displays the last 6 images for the grass model with the accuracy for before and after. The following table displays the last 6 images for the dandelion with the same information. \\
 
 
 \begin{center}
@@ -245,17 +251,21 @@ Type & Image & Accuracy Before Attacks & Accuracy After Attacks \\
 Table 2. Dandelion Image Accuracy Before and After Attacks
 \end{center}
 \subsubsection{Correctness}
-An adversarial attack deliberate method of manipulating an image to deceive the predictions of a machine learning model. The effectiveness of an attack is measured by its ability to mislead the model while also maintaining the visual appearance of the original image. In the table provided, the accuracy of the model in predicting whether an image depicts grass or dandelions was significantly reduced after applying various adversarial attack algorithms, including genetic algorithm, particle swarm optimization, simulated annealing, hill climbing, and fast gradient sign method. Prior to the attack, the model demonstrated excellent accuracy with a minimum prediction accuracy of 96\% for all images except one. The decrease in accuracy shown by the model after the application of adversarial attacks demonstrates the effectiveness of  the algorithms we chose to use and also potential threats attackers can take advantage of when trying to compromise the performance of a machine learning model.
+An adversarial attack deliberate method of manipulating an image to deceive the predictions of a machine learning model. The effectiveness of an attack is measured by its ability to mislead the model while also maintaining the visual appearance of the original image. In the table provided, the accuracy of the model in predicting whether an image depicts grass or dandelions was significantly reduced after applying various adversarial attack algorithms, including genetic algorithm, particle swarm optimization, simulated annealing, hill climbing, and fast gradient sign method. Prior to the attack, the model demonstrated excellent accuracy with a minimum prediction accuracy of 96\% for all images except one. The decrease in accuracy shown by the model after the application of adversarial attacks demonstrates the effectiveness of  the algorithms we chose to use and also potential threats attackers can take advantage of when trying to compromise the performance of a machine learning model. \\
+DO WE RESEARCH A METHOD OF PROVING CORRECTNESS AND SAY "THIS IS WHAT WE WOULD DO"
 \subsubsection{Verification}
 Verification is the process of checking whether the attack algorithm meets the specifications or requirements. Here we discuss how we would verify the five sub-algorithms that are weighted and combined into one main adversarial attack on the provided grass/dandelion classifier to fool it into incorrectly classifying the image by under 50\%. The tool we would use to verify the code is a static analysis. A static analysis of the algorithm is a method of verifying code correctness by analyzing the code without running it. The tool we would have used is the Lintr package on R. "Lint, or linting, is a tool that analyses source code to flag programming errors, bugs, stylistic errors, and suspicious constructs" (Nicholls, 2023). The package will check for and report syntax errors and possible semantic issues. We found this would be helpful when detecting vulnerabilities/weaknesses in our code.  
 
 \subsection{Runtime,
 Complexity, and Walltime}
 
+
 \subsubsection{Runtime}
 
+The runtime of an algorithm in R that changes the pixels of an image to modify it would depend on various factors such as the size of the image, the complexity of the image processing techniques used, and the computational power of the system on which the algorithm is run. In general, image processing algorithms involve operations such as loading the image, manipulating pixel values, applying filters or transformations, and saving the modified image. These operations can be computationally intensive, especially for large images. To optimize the performance of the algorithm, techniques such as parallel processing, vectorization, and caching can be used. Parallel processing can be used to split the image processing task into smaller subtasks that can be executed concurrently on multiple processor cores. Vectorization involves performing operations on arrays of data instead of individual elements, which can significantly improve the processing speed. Caching can be used to store intermediate results to avoid recomputing them. In conclusion, the runtime of an algorithm that changes the pixels of an image in R can vary depending on various factors, and optimizing the algorithm's performance can involve techniques such as parallel processing, vectorization, and caching.
 \subsubsection{Complexity}
-The complexity of adversarial attacks refers to the degree of computational resources, time, and effort needed to create adversarial examples that can effectively deceive machine learning models. It measures the difficulty of performing an attack and the computational power required to produce effective adversarial examples. Our adversarial attack algorithm that utilizes genetic algorithm, particle swarm optimization, simulated annealing, hill climbing, and fast gradient sign method exhibits a high level of complexity due to its iterative nature and large number of possible solutions. While genetic algorithm and particle swarm optimization are computationally expensive since they evaluate each pixel of an image to find the optimal solution, simulated annealing and hill climbing methods are less complex as they focus on evaluating neighboring solutions to identify the most effective one. The fast gradient sign method, on the other hand, is relatively simpler but still involves computing gradients and applying small perturbations to the input image. Overall, the use of these algorithms can be computationally demanding, and therefore it requires us to strike a balance between the complexity and effectiveness of each method.
+The complexity of adversarial attacks refers to the degree of computational resources, time, and effort needed to create adversarial examples that can effectively deceive machine learning models. It measures the difficulty of performing an attack and the computational power required to produce effective adversarial examples. Our adversarial attack algorithm that utilizes genetic algorithm, particle swarm optimization, simulated annealing, hill climbing, and fast gradient sign method exhibits a high level of complexity due to its iterative nature and large number of possible solutions. While genetic algorithm and particle swarm optimization are computationally expensive since they evaluate each pixel of an image to find the optimal solution, simulated annealing and hill climbing methods are less complex as they focus on evaluating neighboring solutions to identify the most effective one. The fast gradient sign method, on the other hand, is relatively simpler but still involves computing gradients and applying small perturbations to the input image. Overall, the use of these algorithms can be computationally demanding, and therefore it requires us to strike a balance between the complexity and effectiveness of each method. \\
+DO WE DISCUSS MORE OF THE METHODOLOGY OF THE CODE [LIKE THE WAY IT FLOWS]?
 \subsubsection{Walltime}
 
 The walltime of the algorithm refers to the actual time elapsed from the start to the end of the algorithm execution (Kuo, 2020). Walltime is an important performance metric for adversarial attack algorithms because it is a big factor when determining the practicality of an attack especially in real-time or time-sensitive applications. The walltime is effected by the implementation of the algorithm, which computational resources are used and the complexity of the targeted neural network. The walltime of our algorithm ended up being XXX. We interpreted this as fairly good for the size of the neural network and purpose of the attack.  
@@ -264,6 +274,8 @@ Justifying efficiency trade-offs in light of performance is crucial,
 so make sure you document all iterations of your algorithm and why you took that specific development path. 
 
 We used the following scoring equation, $\sum_{b=1}^{0.01*P} f * \frac{P}{b}$, where P is the number of pixels in the image and f is the number of successfully fooled images at a given budget level b, to determine our algorithm performance. 
+
+TALK ABOUT DECLAN'S PROGRESS WITH 70\% ACCURACY AND USE THE SCORING EQUATION
 
 %REFERENCES
 \newpage
