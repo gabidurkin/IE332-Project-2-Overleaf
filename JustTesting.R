@@ -1,198 +1,28 @@
-library(tidyverse)
-library(keras)
-library(tensorflow)
-library(reticulate)
-library(GA)
-library(pso)
-library(GenSA)
-
-#setwd("IE332P2")
-model<-load_model_tf("./dandelion_model")
-
-#YOUR ALGORITHM HERE==========================
-
-initialize_population <- function(image, pop_size) {
-  num_pixels <- nrow(image) * ncol(image) * dim(image)[3] # Multiply by the number of channels (dim(image)[3])
-  population <- matrix(runif(num_pixels * pop_size, min = 0, max = 255), ncol = num_pixels)
-  population <- round(population)
-  return(population)
-}
-
-evaluate_population <- function(image, population) {
-  # Calculate the objective function for each individual in the population
-  objectives <- apply(population, 1, function(individual) {
-    modified_image <- apply_adversarial_changes(image, individual)
-    x <- image_to_array(modified_image)
-    x <- array_reshape(x, c(1, dim(x)))
-    x <- x / 255
-    cat("\n",individual[1],individual[2],individual[3],individual[4],individual[5],individual[11],individual[12],individual[13],individual[14],individual[15],individual[16],individual[101],individual[102],individual[103],individual[104])
-    cat("\n",x[1],x[2],x[3],x[4],x[5],x[11],x[12],x[13],x[14],x[15],x[16],x[101],x[102],x[103],x[104])
-    pred <- model %>% predict(x)
-    print(pred)
-    objective <- pred[1, 2] # Assuming class 1 is the target class to fool the classifier
-    return(objective)
-  })
-  return(objectives)
-}
-
-
-get_best_individual <- function(population) {
-  objectives <- evaluate_population(image, population)
-  best_index <- which.max(objectives)
-  best_individual <- population[best_index,]
-  return(best_individual)
-}
-apply_adversarial_changes <- function(image, changes) {
-  modified_image <- image
-  
-  # Apply adversarial changes to the image
-  for (i in seq_along(changes)) {
-    # Extract the pixel indices and new pixel values from the changes vector
-    pixel_idx <- changes[[i]][1]
-    new_pixel_val <- changes[[i]][2]
-    
-    # Calculate the row, column, and channel indices of the pixel
-    num_rows <- dim(modified_image)[1]
-    num_cols <- dim(modified_image)[2]
-    row_idx <- (pixel_idx - 1) %/% (num_rows * num_cols) %% num_rows + 1
-    col_idx <- (pixel_idx - 1) %/% num_rows %% num_cols + 1
-    channel_idx <- (pixel_idx - 1) %/% (num_rows * num_cols * 3) + 1
-    
-    # Set the new pixel value in the modified image
-    modified_image[row_idx, col_idx, channel_idx] <- new_pixel_val
-  }
-  
-  return(modified_image)
-}
-
-
-particle_swarm_optimization <- function(image) {
-  # Parameters for Particle Swarm Optimization
-  num_particles <- 2
-  num_iterations <- 2
-  w <- 2.7
-  c1 <- 10.5
-  c2 <- 10.5
-  
-  # Initialize particles
-  particles <- initialize_population(image, num_particles)
-  cat("dim(particles): ", dim(particles))
-  # Initialize particle velocities
-  velocities <- matrix(0, nrow = num_particles, ncol = ncol(particles))
-  
-  # Initialize best individual positions and global best position
-  p_best_positions <- particles
-  p_best_scores <- rep(0, num_particles)
-  g_best_position <- particles[1,]
-  g_best_score <- 0
-  
-  # Iterate through iterations
-  for (iteration in 1:num_iterations) {
-    # Evaluate the fitness of the particles
-    cat("\nIteration: ", iteration, " / ", num_iterations, "\n")
-    fitness_scores <- -evaluate_population(image, particles)
-    
-    # Update the best individual positions and scores
-    better_scores_idx <- fitness_scores > p_best_scores
-    p_best_positions[better_scores_idx,] <- particles[better_scores_idx,]
-    p_best_scores[better_scores_idx] <- fitness_scores[better_scores_idx]
-    
-    # Update the global best position and score
-    if (max(fitness_scores) > g_best_score) {
-      g_best_position <- particles[which.max(fitness_scores),]
-      g_best_score <- max(fitness_scores)
-    }
-    
-    # Update particle velocities
-    r1 <- runif(ncol(particles))
-    r2 <- runif(ncol(particles))
-    cognitive_velocity <- c1 * r1 * (p_best_positions - particles)
-    social_velocity <- c2 * r2 * (matrix(rep(g_best_position, num_particles), nrow = num_particles, byrow = TRUE) - particles)
-    velocities <- w * velocities + cognitive_velocity + social_velocity
-    
-    # Update particle positions
-    particles <- particles + velocities
-    particles <- pmax(pmin(particles, 255), 0) # Clip particle values to [0, 255] range
-    
-  }
-  
-  # Apply the adversarial changes based on the global best position
-  modified_image <- apply_adversarial_changes(image, g_best_position)
-  print(g_best_position)
-  return(modified_image)
-}
-
-
-
-# Apply the adversarial attack on the test images
-f=list.files("./grass")
-target_size = c(224, 224)
-accuracy_var <- 0
-loss_var <- 0
-for (i in f){
-  test_image <- image_load(paste("./grass/",i,sep=""), target_size = target_size)
-  x <- image_to_array(test_image)
-  
-  #Implementing adversarial attack with just one algorithm
-  print(paste("Image: ", which(f == i), " / ", length(f)))
-  print("Dimensions of unattacked image: ")
-  print(dim(x))
-  x <- particle_swarm_optimization(x)
-  print("Dimensions of attacked image: ")
-  print(dim(x))
-  x <- array_reshape(x, c(1, dim(x)))
-  x <- x/255
-  pred <- model %>% predict(x)
-  if(pred[1,2]<0.50){
-    print(i)
-  }
-  accuracy_var <- accuracy_var + pred[1,2]
-  loss_var <- loss_var + pred[1,1]
-}
-cat("Attacked Grass Accuracy:", accuracy_var, "Loss:", loss_var, "\n")
-
-#TESTING==========================
-#The images are already classified into the appropriate folders, and you can use
-#the following code after you've modified your images to determine if you made the
-#classifier fail (very similar to what's in the tutorial, only slightly modified
-#to let you check all the images in the grass or dandelion folders, respectively)
-
-f=list.files("./grass")
-target_size = c(224, 224)
-accuracy_var <- 0
-loss_var <- 0
-for (i in f){
-  test_image <- image_load(paste("./grass/",i,sep=""),
-                           target_size = target_size)
-  x <- image_to_array(test_image)
-  x <- array_reshape(x, c(1, dim(x)))
-  x <- x/255
-  pred <- model %>% predict(x)
-  if(pred[1,2]<0.50){
-    print(i)
-  }
-  accuracy_var <- accuracy_var + pred[1,2]
-  loss_var <- loss_var + pred[1,1]
-}
-cat("Unchanged Grass Accuracy:", accuracy_var, "Loss:", loss_var, "\n")
-
-
-
-#DECLAN CODE
+#Attack 1 - uses 1% pixel budget achieved 71% on my computer
 
 library(tidyverse)
 library(keras)
 
-#setwd("IE332P2")
+
+setwd("IE332P2")
 model<-load_model_tf("./dandelion_model")
 
 # Implementing a simple attack algorithm for fpgm
-fpgm_attack <- function(image, epsilon) {
+fpgm_attack <- function(image, epsilon, pixel_budget) {
   # Extract the pixel values from the image
   x <- image_to_array(image)
   
-  # Apply the fpgm attack
-  x <- epsilon * sign(x) * sqrt(abs(x))
+  # Calculate the pixel budget based on the total number of pixels in the image
+  pb <- floor(prod(dim(x)) * pixel_budget)
+  
+  # Sort the pixel values by absolute value
+  sx <- sort(abs(x), decreasing = TRUE)
+  
+  # Select the top pixels based on the pixel budget
+  selected_pixels <- sx[1:pb]
+  
+  # Apply the fpgm attack to the selected pixels
+  x[abs(x) %in% selected_pixels] <- epsilon * sign(x[abs(x) %in% selected_pixels]) * sqrt(abs(x[abs(x) %in% selected_pixels]))
   
   # Clip the pixel values to the valid [0, 1] range
   x <- pmax(pmin(x, 1), 0)
@@ -211,7 +41,8 @@ f = list.files("./grass")
 target_size = c(224, 224)
 accuracy_var <- 0
 loss_var <- 0
-user_epsilon <- 100
+user_epsilon <- 2
+pixel_budget <- 0.01
 
 for (i in f) {
   test_image <- image_load(paste("./grass/", i, sep = ""), target_size = target_size)
@@ -220,7 +51,7 @@ for (i in f) {
   print(paste("Image: ", which(f == i), " / ", length(f)))
   print("Dimensions of unattacked image: ")
   print(dim(test_image))
-  x <- fpgm_attack(test_image, user_epsilon)
+  x <- fpgm_attack(test_image, user_epsilon, pixel_budget)
   print("Dimensions of attacked image: ")
   print(dim(x))
   
@@ -255,3 +86,70 @@ for (i in f){
   loss_var <- loss_var + pred[1,1]
 }
 cat("Unchanged Grass Accuracy:", accuracy_var, "Loss:", loss_var, "\n")
+
+#Attack 2 - Gaussian Noise
+library(tidyverse)
+library(keras)
+
+# Load the model
+model <- load_model_tf("./dandelion_model")
+
+# Function to apply the Gaussian noise attack
+gaussian_attack <- function(image, epsilon) {
+  # Extract the pixel values from the image
+  x <- image_to_array(image)
+  
+  # Calculate the total number of pixels
+  num_pixels <- length(x)
+  
+  # Calculate the pixel budget
+  pixel_budget <- floor(num_pixels * 0.01)
+  
+  # Apply the Gaussian noise attack
+  noise <- array(rnorm(num_pixels, sd = epsilon), dim = dim(x))
+  noise[order(abs(noise), decreasing = TRUE)[(pixel_budget+1):num_pixels]] <- 0
+  x <- x + noise
+  
+  # Clip the pixel values to the valid [0, 1] range
+  x <- pmax(pmin(x, 1), 0)
+  
+  # Reshape the array to match the input shape of the model
+  x <- array_reshape(x, c(1, dim(x)))
+  
+  # Scale the pixel values to the range [0, 1]
+  x <- x / 255
+  
+  return(x)
+}
+
+# Testing block
+f <- list.files("./grass")
+target_size <- c(224, 224)
+accuracy_var <- 0
+loss_var <- 0
+user_epsilon <- 0.01
+
+for (i in f) {
+  test_image <- image_load(paste("./grass/", i, sep = ""), target_size = target_size)
+  
+  # Apply the Gaussian noise attack
+  print(paste("Image: ", which(f == i), " / ", length(f)))
+  print("Dimensions of unattacked image: ")
+  print(dim(test_image))
+  x <- gaussian_attack(test_image, user_epsilon)
+  print("Dimensions of attacked image: ")
+  print(dim(x))
+  
+  # Make a prediction on the adversarial example
+  pred <- model %>% predict(x)
+  
+  if (pred[1, 2] < 0.50) {
+    print(i)
+  }
+  
+  accuracy_var <- accuracy_var + pred[1, 2]
+  loss_var <- loss_var + pred[1, 1]
+}
+cat("Attacked Grass Accuracy:", accuracy_var, "Loss:", loss_var, "\n")
+
+
