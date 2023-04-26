@@ -182,109 +182,69 @@ cat("Unchanged Grass Accuracy:", accuracy_var, "Loss:", loss_var, "\n")
 
 library(tidyverse)
 library(keras)
-library(tensorflow)
-library(reticulate)
-library(GA)
-library(pso)
-library(GenSA)
 
-setwd("IE332P2")
+#setwd("IE332P2")
 model<-load_model_tf("./dandelion_model")
 
-#YOUR ALGORITHM HERE
-initialize_population <- function(image, pop_size) {
-  num_pixels <- nrow(image) * ncol(image) * dim(image)[3] # Multiply by the number of channels (dim(image)[3])
-  population <- matrix(runif(num_pixels * pop_size, min = 0, max = 255), ncol = num_pixels)
-  population <- round(population)
-  return(population)
-}
-
-evaluate_population <- function(image, population) {
-  # Calculate the objective function for each individual in the population
-  objectives <- apply(population, 1, function(individual) {
-    modified_image <- apply_adversarial_changes(image, individual)
-    x <- image_to_array(modified_image)
-    x <- array_reshape(x, c(1, dim(x)))
-    x <- x / 255
-    cat("\n",individual[1],individual[2],individual[3],individual[4],individual[5],individual[11],individual[12],individual[13],individual[14],individual[15],individual[16],individual[101],individual[102],individual[103],individual[104])
-    cat("\n",x[1],x[2],x[3],x[4],x[5],x[11],x[12],x[13],x[14],x[15],x[16],x[101],x[102],x[103],x[104])
-    pred <- model %>% predict(x)
-    print(pred)
-    objective <- pred[1, 2] # Assuming class 1 is the target class to fool the classifier
-    return(objective)
-  })
-  return(objectives)
-}
-
-get_best_individual <- function(population) {
-  objectives <- evaluate_population(image, population)
-  best_index <- which.max(objectives)
-  best_individual <- population[best_index,]
-  return(best_individual)
-}
-
-apply_adversarial_changes <- function(image, changes) {
-  modified_image <- image
+# Implementing a simple attack algorithm for fpgm
+fpgm_attack <- function(image, epsilon) {
+  # Extract the pixel values from the image
+  x <- image_to_array(image)
   
-  # Apply adversarial changes to the image
-  for (i in seq_along(changes)) {
-    # Extract the pixel indices and new pixel values from the changes vector
-    pixel_idx <- changes[[i]][1]
-    new_pixel_val <- changes[[i]][2]
-    
-    # Calculate the row, column, and channel indices of the pixel
-    num_rows <- dim(modified_image)[1]
-    num_cols <- dim(modified_image)[2]
-    row_idx <- (pixel_idx - 1) %/% (num_rows * num_cols) %% num_rows + 1
-    col_idx <- (pixel_idx - 1) %/% num_rows %% num_cols + 1
-    channel_idx <- (pixel_idx - 1) %/% (num_rows * num_cols * 3) + 1
-    
-    # Set the new pixel value in the modified image
-    modified_image[row_idx, col_idx, channel_idx] <- new_pixel_val
-  }
+  # Apply the fpgm attack
+  x <- epsilon * sign(x) * sqrt(abs(x))
   
-  return(modified_image)
-}
-
-adversarial_attack_gaussian <- function(image, noise_sd) {
-  # Generate Gaussian noise with standard deviation noise_sd
-  noise <- array(rnorm(nrow(image) * ncol(image) * dim(image)[3], mean = 0, sd = noise_sd), dim = dim(image))
-  noisy_image <- image + noise
+  # Clip the pixel values to the valid [0, 1] range
+  x <- pmax(pmin(x, 1), 0)
   
-  # Clip the pixel values to [0, 255]
-  noisy_image <- pmax(noisy_image, 0)
-  noisy_image <- pmin(noisy_image, 255)
-  
-  # Convert the image to a format that can be fed to the model
-  x <- image_to_array(noisy_image)
+  # Reshape the array to match the input shape of the model
   x <- array_reshape(x, c(1, dim(x)))
+  
+  # Scale the pixel values to the range [0, 1]
   x <- x / 255
   
-  # Use the model to make a prediction on the noisy image
-  pred <- model %>% predict(x)
-  
-  # Return the noisy image and the predicted class probabilities
-  return(list(image = noisy_image, pred = pred))
+  return(x)
 }
 
-# Apply the adversarial attack on the test images
+# Apply the fpgm attack on the test images
+f = list.files("./grass")
+target_size = c(224, 224)
+accuracy_var <- 0
+loss_var <- 0
+user_epsilon <- 100
+
+for (i in f) {
+  test_image <- image_load(paste("./grass/", i, sep = ""), target_size = target_size)
+  
+  # Implementing the fpgm attack
+  print(paste("Image: ", which(f == i), " / ", length(f)))
+  print("Dimensions of unattacked image: ")
+  print(dim(test_image))
+  x <- fpgm_attack(test_image, user_epsilon)
+  print("Dimensions of attacked image: ")
+  print(dim(x))
+  
+  # Make a prediction on the adversarial example
+  pred <- model %>% predict(x)
+  
+  if (pred[1, 2] < 0.50) {
+    print(i)
+  }
+  
+  accuracy_var <- accuracy_var + pred[1, 2]
+  loss_var <- loss_var + pred[1, 1]
+}
+cat("Attacked Grass Accuracy:", accuracy_var, "Loss:", loss_var, "\n")
+
+#Test against unattacked set
 f=list.files("./grass")
 target_size = c(224, 224)
 accuracy_var <- 0
 loss_var <- 0
-sd <- 0.1
 for (i in f){
-  test_image <- image_load(paste("./grass/",i,sep=""), target_size = target_size)
+  test_image <- image_load(paste("./grass/",i,sep=""),
+                           target_size = target_size)
   x <- image_to_array(test_image)
-  
-  #Implementing adversarial attack with just one algorithm
-  #print(paste("Image: ", which(f == i), " / ", length(f)))
-  #print("Dimensions of unattacked image: ")
-  #print(dim(x))
-  x <- adversarial_attack_gaussian(x, sd)
-  x <- x$image  # <--- Add this line to extract the modified image from the returned list
-  #print("Dimensions of attacked image: ")
-  #print(dim(x))
   x <- array_reshape(x, c(1, dim(x)))
   x <- x/255
   pred <- model %>% predict(x)
@@ -294,6 +254,4 @@ for (i in f){
   accuracy_var <- accuracy_var + pred[1,2]
   loss_var <- loss_var + pred[1,1]
 }
-cat("Attacked Grass Accuracy:", accuracy_var, "Loss:", loss_var, "\n")
-
-
+cat("Unchanged Grass Accuracy:", accuracy_var, "Loss:", loss_var, "\n")
