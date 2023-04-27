@@ -6,7 +6,7 @@ model <- load_model_tf("./dandelion_model")
 target_size <- c(224, 224)
 
 #Set to 1 for grass or 2 for dandelions
-target_class <- 2
+target_class <- 1
 pixel_budget_ratio <- 0.01
 
 epsilon <- 0.1
@@ -26,10 +26,10 @@ if (target_class == 2) {
 
 for (i in f) {
   initial_image_image <- image_load(paste(filepaththing, i, sep=""), target_size = target_size)
+  
   initial_image <- image_to_array(initial_image_image)
   # Preprocess the image
   input_image <- array_reshape(initial_image / 255, c(1, target_size[[1]], target_size[[2]], 3))
-  
   input_image_tensor <- tf$constant(input_image, dtype = tf$float32)
   with(tf$GradientTape() %as% tape, {
     tape$watch(input_image_tensor)
@@ -45,7 +45,7 @@ for (i in f) {
   sorted_indices <- order(saliency_map_flat, decreasing = TRUE)
   top_pixel_indices <- sorted_indices[1:pixels_per_split]
   # Convert the selected indices back to their corresponding 3D positions
-  top_pixel_positions <- arrayInd(top_pixel_indices, dim(saliency_map_normalized))
+  top_pixel_positions <- arrayInd(top_pixel_indices, dim(saliency_map))
   
   # Create a copy of the input image to modify
   modified_image <- input_image
@@ -129,8 +129,8 @@ for (i in f) {
 
   # The saliency_map_normalized is a 2D array with the same height and width as the input image
   # Each value represents the relative importance of changing the corresponding pixel in the input image
-  if (sum(saliency_map_normalized)==0) {
-    cat("\n❌ Can't get gradients on model I guess?: "," ",sum(saliency_map_normalized)," ",i)
+  if (sum(saliency_map)==0) {
+    cat("\n❌ Can't get gradients on model I guess?: "," ",sum(saliency_map)," ",i)
   }
   else {
     cat("\n✅ Image: ", which(f == i), " / ", length(f),"\n",i)
