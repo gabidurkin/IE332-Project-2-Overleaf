@@ -71,13 +71,13 @@ Accountable together -- we are Purdue.''}
     \begin{tabular}{c|m{5em}m{5em}m{5em}m{5em}m{4em}|c|c}
       Student & Algorithm Development & Complexity Analysis & Implemen-tation & Performance Analysis/Testing & Report & Overall & DIFF\\
       \hline
-      Gabi & x & x & x & x & x & x& x\\
-      Haley & x & x & x & x & x & x & x\\
-      Declan & x & x & x & x & x & x & x\\
-      Ben & x & x & x & x & x & x & x\\
-      Rohan & x & x & x & x & x & x & x\\
+      Gabi & 20 & 20 & 20 & 20 & 20 & 100 & 0\\
+      Haley & 20 & 20 & 20 & 20 & 20 & 100 & 0\\
+      Declan & 20 & 20 & 20 & 20 & 20 & 100 & 0\\
+      Ben & 20 & 20 & 20 & 20 & 20 & 100 & 0\\
+      Rohan & 20 & 20 & 20 & 20 & 20 & 100 & 0\\
       \hline
-      St Dev & x & x & x & x & x & x & x
+      St Dev & 0 & 0 & 0 & 0 & 0 & 0 & 0
     \end{tabular}
   \end{center}
 \end{table}
@@ -141,13 +141,13 @@ Accountable together -- we are Purdue.''}
 % BEGIN YOUR ASSIGNMENT HERE:
 \def\Plus{\texttt{+}}
 \section{Introduction}
-\underline{Github Link:}\\
+\underline{Github Link:} \url{https://github.com/gabidurkin/IE332-Project-2-Overleaf}
 
 \subsection{Executive Summary}
-\noindent This report details Team 4's efforts toward the completion of IE332's Project 2. The team attempted to complete this machine learning program through a five-subsection algorithm that fools an image classifier while following the given constraints.
+\noindent This report details Team 4's efforts toward the completion of IE332's Project 2. The team attempted to complete this machine learning program through a five-subsection algorithm that fools a binary image classifier while following the given constraints.
 
 \subsection{Problem Statement}
-\noindent Project 2 presented the team with a problem regarding a binary image classifier. The team is responsible for building and manipulating a majority voting classifier that weights the use of five sub-algorithms that must perform adversarial attacks on the given classifier. The purpose of these attacks is to trick the classifier into incorrectly classifying images. the team must complete this task in under ten seconds per image and without changing the input images enough that the naked eye would notice a difference.
+\noindent Project 2 presented the team with a problem regarding a binary image classifier. The team is responsible for building and manipulating a majority classifier that weights the use of five sub-algorithms that must perform adversarial attacks on the given classifier. The purpose of these attacks is to trick the classifier into incorrectly classifying images of dandelions and grass. The algorithm must complete this task in under ten seconds per image and without changing the input images enough that the naked eye would notice a difference.
 
 \subsection{Sub-algorithm Introduction}
 
@@ -203,7 +203,7 @@ In our case, it does this by determining how good each pixel in the picture is, 
 
 \subsection{Combination of Sub-Algorithms and Weighting}
 
-\noindent The code above implements a weighted majority classifier algorithm to combine the results of five different optimization techniques to generate an output image that is optimized for a given input image and a specified pixel budget. The first five lines of the code apply the five different optimization techniques (genetic algorithm, particle swarm optimization, simulated annealing, fast gradient sign method, and hill climbing) to the input image to generate optimized results for each technique. These optimized results are stored in separate variables. The code then assigns weights to each of the optimized results based on their performance. The weights are specified using the weight\_ga, weight\_pso, weight\_sa, weight\_gd, and weight\_rf variables. The weights are then combined into a vector called weights. The weighted\_results variable is then computed by taking a weighted sum of each of the optimized results using the weights in the weights vector. This is the core of the weighted majority classifier algorithm. The resulting weighted sum is a single image that represents the combination of the optimized results. The select\_pixels function is then used to select the pixels to modify based on the weighted\_results and the pixel\_budget. This generates the final output image that is optimized according to the specified budget and the user-specified weights for each optimization technique. In summary, the weighting in this code occurs by assigning weights to each of the optimized results from the different optimization techniques and combining these weights into a vector. This vector is then used to compute the weighted sum of the optimized results to generate the final output image. The result assigns weights to different algorithms based on the expected performance of some images; after the algorithms vote on which  pixels to change, the optimizer must choose from that set which pixels to actually use.
+\noindent The team planned to weigh the sub-algorithms into a combination algorithm by how well the sub-algorithm is at fooling the binary classifier. The best algorithm would be weighted the highest so that we could maximize our chances of misclassification. Other considerations taken were the runtime of the overall algorithm. Typically, more in-depth algorithms take the longest to run and have the highest complexities. To counteract this, the team planned to weigh algorithms that are more simple and less complex on the higher side. Therefore, the least accurate and most computationally expensive algorithm would be weighed the lowest. The trade-offs between accuracy, speed, runtime, and complexity are all factors that impacted the decisions made concerning the weights of the majority classifier.
 
 \section{Implementation}
 \noindent The team broke down algorithm building into smaller tasks by dividing the sub-algorithms between the group members. The plan was to individually get each sub-algorithm working, then combine all the work into one large algorithm with weights to optimize confusion in the binary image classifier. Some algorithms proved to be successful, while some ended up making the classifier more accurate. These road bumps led the team to rethink our implementation strategy.
@@ -212,7 +212,7 @@ In our case, it does this by determining how good each pixel in the picture is, 
 \newline\\
 \noindent The team decided to utilize a saliency map to determine which pixels are most important to the classifier's decision. A saliency map is basically a heat map of the input image of where the most important areas of the image are for classification (What Is Saliency Map, 2020). This breakthrough led the team to a better understanding of machine learning and how to get into the mindset of the binary image classifier.
 \newline\\
-\noindent From the saliency map, the team found the best 1\% of pixels to change and used their gradients to find which type of change will cause the most confusion in the classifier. This algorithm we devised is similar to the Fast Gradient Sign Method. Even though that algorithm wasn't successful for the team, we worked around it by coming up with a creative solution. The team furthered this path by reiterating the gradients on the most important pixels and changing them again. This keeps up under the pixel budget but increases the inaccuracy of the classifier's predictions.\\\\
+\noindent From the saliency map, the team found the best 1\% of pixels to change and used their gradients to find which type of change will cause the most confusion in the classifier. This algorithm we devised is similar to the Fast Gradient Sign Method. Even though FGSM wasn't successful for the team, we worked around it by coming up with a creative solution. The team furthered this path by reiterating the gradients on the most important pixels and changing them again. This keeps up under the pixel budget but increases the inaccuracy of the classifier's predictions.\\\\
 The table below displays the saliency map of two random images from the training data, one from the grass images and the other from the dandelion images, and their respective saliency map. 
 \begin{center}
 \begin{tabular}{|m{5em}|m{11em}|m{10em}|}
@@ -231,32 +231,52 @@ Dandelion & \includegraphics[width = 40mm, height = 40mm]{images/AdobeStock_2063
 Table 1. Grass \& Dandelion Images with Saliency Map
 \end{center}
 
-\noindent After this realization, the team improved this new algorithm by breaking down the finding of optimal pixels into smaller iterations. Our improved algorithm now finds very few optimal pixels, changes them on a gradient, then repeats this iteration until the 1\% pixel budget is reached. This allows pixels that have been altered once to be altered again if it will more efficiently confuse the classifier. Because the same pixel can be adjusted more than once, the algorithm can iterate more times than originally, while still remaining below the pixel budget. This update greatly improved our results by causing misclassifications more often and with greater inaccuracy.
+\noindent After this realization, the team improved this new algorithm by breaking down the finding of optimal pixels into smaller iterations. Our improved algorithm now finds very few optimal pixels, changes them on a gradient, then repeats this iteration until the 1\% pixel budget is reached. This allows pixels that have been altered once to be altered again to be more optimal, with the consideration of the next iteration's worth of pixels.  After each iteration, the algorithm saves the iterated images through the end of all the iterations. It then selects the image that maximizes confusion and decreases accuracy. This ensures that, if the final iteration isn't the optimal solution, the optimal solution will still be used to fool the classifier. These updates greatly improved our results by causing misclassifications more often and with greater inaccuracy.
+\newline\\
+\noindent The table below displays the updated saliency maps of the same two training data images.
+
+\begin{center}
+\begin{tabular}{|m{5em}|m{11em}|m{11.5em}|}
+\hline
+Type & Image & Saliency Map \\
+\hline
+Grass & \includegraphics[width = 40mm, height = 40mm]{images/20334a31c970fb3607b17613614f9244-1240575823.jpg} &
+\includegraphics[width = 45mm, height = 45mm]{images/grass_saliency2.png}\\
+\hline
+Dandelion & \includegraphics[width = 40mm, height = 40mm]{images/AdobeStock_206345546-426480574.jpg} & 
+\includegraphics[width = 40mm, height = 40mm]{images/dandelionn_saliency2.png}\\
+\hline
+\end{tabular}
+\end{center}
+\begin{center}
+Table 2. Grass \& Dandelion Images with Updated Saliency Map
+\end{center}
+
+\noindent As evidenced through the updated saliency maps above, it is easy to see how the new algorithm is better at misclassifying the grass and dandelion images. There are more intense changes made to the image, while still remaining under the pixel budget. The clusters on the grass image of the saliency map are what is fooling the classifier into thinking the image shows dandelions flowers. The clusters on the dandelion image of the saliency map are what is fooling the classifier into thinking that the flower is smoothed over into the grass. 
 
 %APPENDICES
 \newpage
 \section{Appendices}
 \subsection{Testing, Correctness, and Verification}
 \subsubsection{Testing}
-When evaluating the effectiveness of our adversarial attack algorithms on the neural network, we looked at the accuracy and robustness. Other testing metrics include perturbation size and transferability; however, we did not have the ability to generate additional neural networks nor other adversarial examples. Accuracy is the percentage of correctly classified examples in the test set. We dictated the last 6 images in the provided dandelion and grass image folders to be our test sets. Robustness is the ability of the model to resist adversarial attacks. This metric can be found by comparing the accuracy of the model on the original test set with the accuracy on the model with the adversarially altered test set. Although our algorithm did not fully fool the classifier, we were able to decrease the accuracy after using simpler attack methods. The tables on the next page display a summary of the test cases for before and after the attacks are implemented. The first table displays the last 6 images for the grass model with the accuracy for before and after. The following table displays the last 6 images for the dandelion with the same information. \\
-
+When evaluating the effectiveness of our adversarial attack algorithms on the neural network, we looked at the accuracy and robustness. Other testing metrics include perturbation size and transferability. Accuracy is the percentage of correctly classified examples in the test set. We dictated the last 6 images in the provided dandelion and grass image folders to be our test sets. Robustness is the ability of the model to resist adversarial attacks. This metric can be found by comparing the accuracy of the model on the original test set with the accuracy on the model with the adversarially altered test set. Although our original algorithm did not fully fool the classifier, we were able to fool the classifier using the simpler attack method discussed in implementation. The tables on the next page display a summary of the test cases for before and after the attacks are implemented. The first table displays the last 6 images for the grass model with the accuracy for before and after. The following table displays the last 6 images for the dandelion with the same information. \\
 
 \begin{center}
 \begin{tabular}{|m{5em}|m{8em}|m{11em}|m{11em}|}
 \hline
 Type & Image & Accuracy Before Attacks & Accuracy After Attacks \\
 \hline
-\multirow{6}{4em}{Grass} & \includegraphics[width=30mm, height=15mm]{images/th-246163958.jpg} & 0.9964305 & xx \\ 
-& \includegraphics[width=30mm, height=15mm]{images/th-373883262.jpg} & 0.9906991 & xx \\ 
-& \includegraphics[width=30mm, height=15mm]{images/th-384947726.jpg} & 0.9962944 & xx \\
-& \includegraphics[width=30mm, height=15mm]{images/th-4166387598.jpg} & 0.9992237 & xx \\ 
-& \includegraphics[width=30mm, height=15mm]{images/wheatgrass-2be8422b0eea4c969351410093ccae42-2419490567.jpg} & 0.9787846 & xx \\ 
-& \includegraphics[width=30mm, height=15mm]{images/zoysia-grass-2723693948.jpg} & 0.9982908 & xx \\ 
+\multirow{6}{4em}{Grass} & \includegraphics[width=30mm, height=15mm]{images/th-246163958.jpg} & 0.9964305 & 0.2172418 \\ 
+& \includegraphics[width=30mm, height=15mm]{images/th-373883262.jpg} & 0.9906991 & 0.2172418  \\ 
+& \includegraphics[width=30mm, height=15mm]{images/th-384947726.jpg} & 0.9962944 & 0.0090162 \\
+& \includegraphics[width=30mm, height=15mm]{images/th-4166387598.jpg} & 0.9992237 & 0.1460789 \\ 
+& \includegraphics[width=30mm, height=15mm]{images/wheatgrass-2be8422b0eea4c969351410093ccae42-2419490567.jpg} & 0.9787846 & 0.0115845 \\ 
+& \includegraphics[width=30mm, height=15mm]{images/zoysia-grass-2723693948.jpg} & 0.9982908 & 0.7785143 \\ 
 \hline
 \end{tabular}
 \end{center}
 \begin{center}
-Table 2. Grass Image Accuracy Before and After Attacks
+Table 3. Grass Image Accuracy Before and After Attacks
 \end{center}
 
 \begin{center}
@@ -264,17 +284,17 @@ Table 2. Grass Image Accuracy Before and After Attacks
 \hline
 Type & Image & Accuracy Before Attacks & Accuracy After Attacks \\
 \hline
-\multirow{6}{4em}{Dandelion} & \includegraphics[width=30mm, height=15mm]{images/th-3423486846.jpg} & 0.9880867 & xx \\ 
-& \includegraphics[width=30mm, height=15mm]{images/th-3992465304.jpg} & 0.9602737 & xx \\ 
-& \includegraphics[width=30mm, height=15mm]{images/th-4103160292.jpg} & 0.9976503 & xx \\
-& \includegraphics[width=30mm, height=15mm]{images/Types_of_Dandelion_600x600-4053252984.jpg} & 0.6243517 & xx \\ 
-& \includegraphics[width=30mm, height=15mm]{images/yellow-18416_960_720-86181412.jpg} & 0.9737037 & xx \\ 
-& \includegraphics[width=30mm, height=15mm]{images/yellow-dandelion-flowers-taraxacum-officinale-spring-sunny-day-blooming-dandelions-field-background-147943753-1959055877.jpg} & 0.9855896 & xx \\ 
+\multirow{6}{4em}{Dandelion} & \includegraphics[width=30mm, height=15mm]{images/th-3423486846.jpg} & 0.9880867 & 0.0000005 \\ 
+& \includegraphics[width=30mm, height=15mm]{images/th-3992465304.jpg} & 0.9602737 & 0.000003 \\ 
+& \includegraphics[width=30mm, height=15mm]{images/th-4103160292.jpg} & 0.9976503 & 0.0000005 \\
+& \includegraphics[width=30mm, height=15mm]{images/Types_of_Dandelion_600x600-4053252984.jpg} & 0.6243517 & 0.0000004 \\ 
+& \includegraphics[width=30mm, height=15mm]{images/yellow-18416_960_720-86181412.jpg} & 0.9737037 & 0.0000006 \\ 
+& \includegraphics[width=30mm, height=15mm]{images/yellow-dandelion-flowers-taraxacum-officinale-spring-sunny-day-blooming-dandelions-field-background-147943753-1959055877.jpg} & 0.9855896 & 0.000001 \\ 
 \hline
 \end{tabular}
 \end{center}
 \begin{center}
-Table 3. Dandelion Image Accuracy Before and After Attacks
+Table 4. Dandelion Image Accuracy Before and After Attacks
 \end{center}
 \subsubsection{Correctness}
 In the context of programming, correctness refers to the property of a program that it behaves in the intended way, producing the expected output for a given input, and not producing any undesired or erroneous behavior. The purpose of our algorithm is to be an adversarial attack method that can manipulate an image to deceive the predictions of a machine learning model. The effectiveness of an attack is measured by its ability to mislead the model while also maintaining the visual appearance of the original image. We used testing as our method for proving correctness. In the table provided, the accuracy of the model in predicting whether an image depicts grass or dandelions was significantly reduced after applying our algorithm. Prior to the attack, the model demonstrated excellent accuracy with a minimum prediction accuracy of 96\% for all images except one. The decrease in accuracy shown by the model after the application of the algorithm demonstrates the effectiveness of the sub-algorithms we chose to use and also potential threats attackers can take advantage of when trying to compromise the performance of a machine learning model. \\
@@ -283,20 +303,20 @@ In the context of programming, correctness refers to the property of a program t
 Verification is the process of checking whether the attack algorithm meets the specifications or requirements. Here we discuss how we would verify the five sub-algorithms that are weighted and combined into one main adversarial attack on the provided grass/dandelion classifier to fool it into incorrectly classifying the image by under 50\%. The tool we would use to verify the code is a static analysis. A static analysis of the algorithm is a method of verifying code correctness by analyzing the code without running it. The tool we would have used is the Lintr package on R. "Lint, or linting, is a tool that analyses source code to flag programming errors, bugs, stylistic errors, and suspicious constructs" (Nicholls, 2023). The package will check for and report syntax errors and possible semantic issues. We found this would be helpful when detecting vulnerabilities/weaknesses in our code.  
 
 \subsection{Runtime,
-Complexity, and Walltime}
-\subsubsection{Runtime}
-The runtime of an algorithm in R that changes the pixels of an image to modify it would depend on various factors such as the size of the image, the complexity of the image processing techniques used, and the computational power of the system on which the algorithm is run. In general, image processing algorithms involve operations such as loading the image, manipulating pixel values, applying filters or transformations, and saving the modified image. These operations can be computationally intensive, especially for large images. To optimize the performance of the algorithm, techniques such as parallel processing, vectorization, and caching can be used. Our runtime is XXX and with this runtime we are able to process splitting the image processing task into smaller subtasks that can be executed concurrently on multiple processor cores. With this runtime XXX the vectorization involves performing operations on arrays of data instead of individual elements, which can significantly improve the processing speed. Caching can be used to store intermediate results to avoid recomputing them. In conclusion, our runtime XXX of the algorithm that changes the pixels of an image in R can vary depending on various factors, and optimizing the algorithm's performance can involve techniques such as parallel processing, vectorization, and caching.
+Complexity, and Walltime Analyses}
+\subsubsection{Runtime Analysis}
+The runtime of an algorithm in R that changes the pixels of an image to modify it would depend on various factors such as the size of the image, the complexity of the image processing techniques used, and the computational power of the system on which the algorithm is run. In general, image processing algorithms involve operations such as loading the image, manipulating pixel values, applying filters or transformations, and saving the modified image. For our algorithm, the runtime per loop and per image is 8 seconds. This does not include the loading time, just the time it takes to go through each image. These operations can be computationally intensive, especially for large images. To optimize the performance of the algorithm, techniques such as parallel processing, vectorization, and caching can be used. Our runtime is 8 seconds and in this runtime we are able to process splitting the image processing task into smaller subtasks that can be executed concurrently on multiple processor cores. The runtime can also vary depending on image size, however, it was able to process 10 images in 80 seconds, making the runtime 8 seconds on average with some variability based on the image. In conclusion, on average the runtime is 8 seconds per image of the algorithm that changes the pixels of an image in R can vary depending on various factors, and optimizing the algorithm's performance can involve techniques such as parallel processing, vectorization, and caching.
 
-\subsubsection{Complexity}
-The complexity of adversarial attacks refers to the degree of computational resources, time, and effort needed to create adversarial examples that can effectively deceive machine learning models. It measures the difficulty of performing an attack and the computational power required to produce effective adversarial examples. Our adversarial attack algorithm that utilizes genetic algorithm, particle swarm optimization, simulated annealing, hill climbing, and fast gradient sign method exhibits a high level of complexity due to its iterative nature and large number of possible solutions. While genetic algorithm and particle swarm optimization are computationally expensive since they evaluate each pixel of an image to find the optimal solution, simulated annealing and hill climbing methods are less complex as they focus on evaluating neighboring solutions to identify the most effective one. The fast gradient sign method, on the other hand, is relatively simpler but still involves computing gradients and applying small perturbations to the input image. Overall, the use of these algorithms can be computationally demanding, and therefore it requires us to strike a balance between the complexity and effectiveness of each method. While our main algorithm has a high level of complexity, the complexity of the parts that fool the classifier are relatively simpler. This is discussed in the Implementation section of the report. \\
 
-\subsubsection{Walltime}
-The walltime of the algorithm refers to the actual time elapsed from the start to the end of the algorithm execution (Kuo, 2020). Walltime is an important performance metric for adversarial attack algorithms because it is a big factor when determining the practicality of an attack especially in real-time or time-sensitive applications. The walltime is effected by the implementation of the algorithm, which computational resources are used and the complexity of the targeted neural network. The walltime of our algorithm ended up being XXX. We interpreted this as fairly good for the size of the neural network and purpose of the attack.  
+\subsubsection{Complexity Analysis}
+The complexity of adversarial attacks refers to the degree of computational resources, time, and effort needed to create adversarial examples that can effectively deceive machine learning models. It measures the difficulty of performing an attack and the computational power required to produce effective adversarial examples. Our adversarial attack algorithm that utilizes genetic algorithm, particle swarm optimization, simulated annealing, hill climbing, and fast gradient sign method exhibits a high level of complexity due to its iterative nature and large number of possible solutions. While genetic algorithm and particle swarm optimization are computationally expensive since they evaluate each pixel of an image to find the optimal solution, simulated annealing and hill climbing methods are less complex as they focus on evaluating neighboring solutions to identify the most effective one. The fast gradient sign method, on the other hand, is relatively simpler but still involves computing gradients and applying small perturbations to the input image. Overall, the use of these algorithms can be computationally demanding, and therefore it requires us to strike a balance between the complexity and effectiveness of each method. While our main algorithm has a high level of complexity, the complexity of the parts that fool the classifier are relatively simpler. This is discussed in the Implementation section of the report. 
+
+\subsubsection{Walltime Analysis}
+The walltime of the algorithm refers to the actual time elapsed from the start to the end of the algorithm execution (Kuo, 2020). Walltime is an important performance metric for adversarial attack algorithms because it is a big factor when determining the practicality of an attack especially in real-time or time-sensitive applications. The walltime is effected by the implementation of the algorithm, which computational resources are used and the complexity of the targeted neural network. The walltime of our algorithm for the grass images ended up being 6.05 seconds. The walltime of our algorithm for the dandelion images ended up being 4.5 seconds. The team interpreted this as fairly good for the size of the neural network and purpose of the attack.  
 \subsection{Performance}
-Justifying efficiency trade-offs in light of performance is crucial,
-so make sure you document all iterations of your algorithm and why you took that specific development path. 
-
-We used the following scoring equation, $\sum_{b=1}^{0.01*P} f * \frac{P}{b}$, where P is the number of pixels in the image and f is the number of successfully fooled images at a given budget level b, to determine our algorithm performance. 
+\noindent The team found success in our performance by fooling the binary image classifier \textbf{38/38} times for dandelion images and \textbf{39/49} times for grass images in the new algorithm that we developed. This leads to a pass rate of \textbf{100\%} of dandelion images and \textbf{79.6\%} of grass images misclassified based on the testing data we selected above. Overall, Team 4 was able to misidentify \textbf{77/87} testing images, which gives an overall success rate of \textbf{88.5\%}.
+\newline\\
+\noindent One aspect of our algorithm to note is how accurate it is for confusing an image of a dandelion with an image of grass. Most images of dandelions are confused with more than 99\% inaccuracy. In contrast, the images of grass are confused with images of dandelions with about 77\% inaccuracy. While most of the testing images of grass can still be misclassified using our algorithm, it is worth recognizing the differences between the two. This variation is likely due to the nature of dandelions and grass.
 
 
 %REFERENCES
